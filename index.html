@@ -1,32 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Index - Mentor Bootstrap Template</title>
+  <title>Inicio</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
-
-  <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
+  <!-- Favicon -->
+  <link href="assets/img/favicon.svg" rel="icon" type="image/svg+xml">
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/vendor/aos/aos.css" rel="stylesheet">
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
-
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
-
   <!-- =======================================================
   * Template Name: Mentor
   * Template URL: https://bootstrapmade.com/mentor-free-education-bootstrap-theme/
@@ -36,34 +29,371 @@
   ======================================================== -->
 </head>
 
-<body class="index-page">
 
+<body class="index-page">
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
       <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
         <h1 class="sitename">Asesoriasoft</h1>
       </a>
 
       <nav id="navmenu" class="navmenu">
   <ul>
-    <li><a href="index.html" class="active">Inicio<br></a></li>
+    <li><a href="index.html" class="active">Inicio</a></li>
     <li><a href="about.html">ISW en ITSON</a></li>
-     <ul>
-    <!-- Courses con DROPDOWN -->
-    <li class="dropdown"><a href="courses.html"><span>Cursos</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-      <ul>
-        <li><a href="#">Cursos de Base de Datos</a></li>
-        <li><a href="#">Cursos de Java</a></li>
-        <li><a href="#">Cursos de Aplicaciones Moviles</a></li>
-        <li><a href="#">Cursos de Sistemas empotrados</a></li>
-      </ul>
-    </li>
-    <li><a href="Events.html">Calendario</a></li>
+    <li><a href="courses.html">Cursos</a></li>
+    <li><a href="trainers.html">Profesores</a></li>
+    <li class="d-xl-none"><a href="#" onclick="document.getElementById('loginModal').style.display='flex'; return false;">Iniciar sesión</a></li>
+    <li class="d-xl-none"><a href="#" onclick="document.getElementById('registerModal').style.display='flex'; return false;">Registrarme</a></li>
+  </ul>
   <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
 </nav>
+    <!-- Botón que abre el modal -->
+
+
+<!-- Modal de Login -->
+<script src="assets/js/modales.js"></script>
+<!-- Botón que abre el modal de Registro -->
+<a href="#" onclick="document.getElementById('registerModal').style.display='flex'; return false;" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #1861D9;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 12px;
+  border: 1.5px solid #1861D9;
+  transition: background 0.3s ease, color 0.3s ease;
+" onmouseover="this.style.background='#1861D9'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='#1861D9';">
+  <i class="bi bi-person-plus"></i> Registrarme
+</a>
+
+<!-- Modal de Registro -->
+<div id="registerModal" style="
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(10, 15, 30, 0.75);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+">
+
+  <div style="
+    background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+    border-radius: 16px;
+    border: 1px solid rgba(24, 97, 217, 0.3);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    padding: 32px 35px;
+    width: 90%;
+    max-width: 520px;
+    position: relative;
+  ">
+
+    <!-- CERRAR -->
+    <span onclick="document.getElementById('registerModal').style.display='none';" style="
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      color: #9CA3AF;
+      font-size: 22px;
+      cursor: pointer;
+      line-height: 1;
+    ">&times;</span>
+
+
+    <!-- ENCABEZADO -->
+    <div style="
+      text-align: center;
+      margin-bottom: 24px;
+    ">
+
+      <div style="
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 14px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #3B82F6, #1861D9);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      ">
+        <i class="bi bi-person-plus-fill" style="
+          font-size: 26px;
+          color: #fff;
+        "></i>
+      </div>
+
+      <h4 style="
+        color: #fff;
+        margin: 0;
+        font-size: 18px;
+      ">Crear cuenta</h4>
+
+    </div>
+
+
+    <form onsubmit="event.preventDefault();  
+      registrarUsuario( 
+        document.getElementById('regEmail').value, 
+        document.getElementById('regPassword').value, 
+        document.getElementById('regNombre').value, 
+        document.getElementById('regCelular').value, 
+        document.getElementById('semestreSelect').value 
+      );">
+
+<!-- FILA 1 -->
+<div style="
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+">
+
+  <!-- NOMBRE -->
+  <div>
+    <label style="display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 6px;">Nombre</label>
+    <input 
+      type="text" 
+      id="regNombre" 
+      required 
+      onfocus="this.style.borderColor='#1861D9'; this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';"
+      onblur="this.style.borderColor='rgba(24,97,217,0.3)'; this.style.boxShadow='none';"
+      style="
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(24,97,217,0.3);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+        caret-color: #1861D9;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      "
+    >
+    <span style="display: block; color: #6B7280; font-size: 11px; margin-top: 5px;">Escribe tu nombre completo</span>
+  </div>
+
+  <!-- CORREO -->
+  <div>
+    <label style="display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 6px;">Correo</label>
+    <input 
+      type="email" 
+      id="regEmail" 
+      required 
+      onfocus="this.style.borderColor='#1861D9'; this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';"
+      onblur="this.style.borderColor='rgba(24,97,217,0.3)'; this.style.boxShadow='none';"
+      style="
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(24,97,217,0.3);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+        caret-color: #1861D9;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      "
+    >
+    <span style="display: block; color: #6B7280; font-size: 11px; margin-top: 3px;">Escribe tu correo electrónico</span>
+  </div>
+
+</div>
+
+<!-- FILA 2 -->
+<div style="
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 18px;
+">
+
+  <!-- CONTRASEÑA -->
+          <!-- CONTRASEÑA -->
+        <div>
+
+          <label style="
+            display: block;
+            color: #9CA3AF;
+            font-size: 13px;
+            margin-bottom: 6px;
+          ">Contraseña</label>
+
+          <div style="position: relative;">
+            <input 
+              type="password" 
+              id="regPassword" 
+              required 
+              minlength="6"
+              onfocus="
+                this.style.borderColor='#1861D9';
+                this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';
+              "
+              onblur="
+                this.style.borderColor='rgba(24,97,217,0.3)';
+                this.style.boxShadow='none';
+              "
+              style="
+                width: 100%;
+                padding: 10px 40px 10px 14px;
+                border-radius: 8px;
+                border: 1px solid rgba(24,97,217,0.3);
+                background: rgba(255,255,255,0.05);
+                color: #fff;
+                font-size: 14px;
+                outline: none;
+                box-sizing: border-box;
+                caret-color: #1861D9;
+                transition: border-color 0.2s ease, box-shadow 0.2s ease;
+              "
+            >
+            <i 
+              class="bi bi-eye-slash" 
+              onclick="
+                const inp = document.getElementById('regPassword');
+                const mostrando = inp.type === 'text';
+                inp.type = mostrando ? 'password' : 'text';
+                this.className = mostrando ? 'bi bi-eye-slash' : 'bi bi-eye';
+              "
+              style="
+                position: absolute;
+                right: 14px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: #9CA3AF;
+                cursor: pointer;
+                font-size: 15px;
+              "
+            ></i>
+          </div>
+
+          <span style="
+            display: block;
+            color: #6B7280;
+            font-size: 11px;
+            margin-top: 5px;
+          ">Mínimo 6 caracteres</span>
+
+        </div>
+
+  <!-- CELULAR -->
+  <div>
+    <label style="display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 6px;">Celular</label>
+    <input  
+      type="tel"  
+      id="regCelular" 
+      required  
+      pattern="[0-9]{10}" 
+      maxlength="10" 
+      inputmode="numeric" 
+      oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+      onfocus="this.style.borderColor='#1861D9'; this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';"
+      onblur="this.style.borderColor='rgba(24,97,217,0.3)'; this.style.boxShadow='none';"
+      style="
+        width: 100%;
+        padding: 10px 14px;
+        border-radius: 8px;
+        border: 1px solid rgba(24,97,217,0.3);
+        background: rgba(255,255,255,0.05);
+        color: #fff;
+        font-size: 14px;
+        outline: none;
+        box-sizing: border-box;
+        caret-color: #1861D9;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      "
+    >
+    <span style="display: block; color: #6B7280; font-size: 11px; margin-top: 5px;">10 dígitos</span>
+  </div>
+
+</div>
+     
+   
+
+
+      <!-- SEMESTRE -->
+      <div style="margin-bottom: 22px;">
+
+        <label style="
+          display: block;
+          color: #9CA3AF;
+          font-size: 13px;
+          margin-bottom: 6px;
+        ">Semestre</label>
+
+        <select 
+          required 
+          id="semestreSelect"
+          onfocus="
+            this.style.borderColor='#1861D9';
+            this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';
+          "
+          onblur="
+            this.style.borderColor='rgba(24,97,217,0.3)';
+            this.style.boxShadow='none';
+          "
+          style="
+            width: 100%;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1px solid rgba(24,97,217,0.3);
+            background: #1e1e2f;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+          "
+        > 
+          <option value="" disabled selected hidden>Selecciona tu semestre</option> 
+          <option value="1">1</option> 
+          <option value="2">2</option> 
+          <option value="3">3</option> 
+          <option value="4">4</option> 
+          <option value="5">5</option> 
+          <option value="6">6</option> 
+          <option value="7">7</option> 
+          <option value="8">8</option> 
+          <option value="mas de 8">Más de 8</option> 
+        </select>
+
+      </div>
+
+
+      <!-- BOTÓN -->
+      <button type="submit" style="
+        width: 100%;
+        background: #1861D9;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      "
+      onmouseover="this.style.background='#144fb0';"
+      onmouseout="this.style.background='#1861D9';">
+        Registrarme
+      </button>
+
+    </form>
+  </div>
+</div>
+<!-- Modal de Registro -->
+
 
     </div>
   </header>
@@ -72,60 +402,43 @@
 
     <!-- Hero Section -->
     <section id="hero" class="hero section dark-background">
-
       <img src="assets/img/tipos-de-software.jpg" alt="" data-aos="fade-in">
-
       <div class="container">
         <h2 data-aos="fade-up" data-aos-delay="150">Aprendiendo hoy,<br>Liderando mañana</h2>
         <p data-aos="fade-up" data-aos-delay="250">Asesorias de Ingieneria en ISW</p>
         <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="500">
-         
         </div>
       </div>
-
     </section><!-- /Hero Section -->
 
     <!-- About Section -->
+    <!-- About Section -->
     <section id="about" class="about section">
-
       <div class="container">
-
         <div class="row gy-4">
-
           <div class="col-lg-6 order-1 order-lg-2" data-aos="fade-up" data-aos-delay="100">
             <img src="assets/img/lenguajes.webp" class="img-fluid" alt="">
           </div>
-
           <div class="col-lg-6 order-2 order-lg-1 content" data-aos="fade-up" data-aos-delay="200">
             <h3>¿Necesitas informacion accesible de algun tema?</h3>
             <p class="fst-italic">
-          Es normal Sentirse perdido en algunos temas con AsesoriaSoft Cuentas con:
+              Es normal Sentirse perdido en algunos temas con AsesoriaSoft Cuentas con:
             </p>
             <ul>
-              <li><i class="bi bi-check-circle"></i> <span>•	Cursos de Base de Datos</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>•	Cursos de Sistemas Empotrados</span></li>
-              <li><i class="bi bi-check-circle"></i> <span>•	Cursos de Aplicaciones Móviles</span></li>
-               <li><i class="bi bi-check-circle"></i> <span>•	Comunicación Con Maestros para asesorias</span></li>
-              
+              <li><i class="bi bi-check-circle"></i> <span><a href="courses.html">•  Cursos de Base de Datos</a></span></li>
+              <li><i class="bi bi-check-circle"></i> <span><a href="courses.html">•  Cursos de Sistemas Empotrados</a></span></li>
+              <li><i class="bi bi-check-circle"></i> <span><a href="courses.html">•  Cursos de Aplicaciones Móviles</a></span></li>
+              <li><i class="bi bi-check-circle"></i> <span><a href="contact.html">•  Comunicación Con Maestros para asesorias</a></span></li>
             </ul>
-            
           </div>
-
         </div>
-
       </div>
-
-    
-
-    </section><!-- /Counts Section -->
+    </section><!-- /About Section -->
 
     <!-- Why Us Section -->
     <section id="why-us" class="section why-us">
-
       <div class="container">
-
         <div class="row gy-4">
-
           <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
             <div class="why-box">
               <h3>Qué diferencia AsesoriaSoft de ITSON de otro Sistema de Asesorias?</h3>
@@ -134,15 +447,11 @@
                 y la generacion de un enlace por meet mediante la pagina
                 ademas de contar con diferentes cursos a la mano para los estudiantes de Itson,
               </p>
-              <div class="text-center">
-                
-              </div>
             </div>
           </div><!-- End Why Box -->
 
           <div class="col-lg-8 d-flex align-items-stretch">
             <div class="row gy-4" data-aos="fade-up" data-aos-delay="200">
-
               <div class="col-xl-4">
                 <div class="icon-box d-flex flex-column justify-content-center align-items-center">
                   <i class="bi bi-chat-dots"></i>
@@ -150,7 +459,6 @@
                   <p>Reservacion para asesorias mediante nuestra pagina</p>
                 </div>
               </div><!-- End Icon Box -->
-
               <div class="col-xl-4" data-aos="fade-up" data-aos-delay="300">
                 <div class="icon-box d-flex flex-column justify-content-center align-items-center">
                   <i class="bi bi-folder"></i>
@@ -158,7 +466,6 @@
                   <p>Repositorio de Temas vistos en la Carrera</p>
                 </div>
               </div><!-- End Icon Box -->
-
               <div class="col-xl-4" data-aos="fade-up" data-aos-delay="400">
                 <div class="icon-box d-flex flex-column justify-content-center align-items-center">
                   <i class="bi bi-arrow-repeat"></i>
@@ -166,83 +473,155 @@
                   <p>Cursos Actualizados acorde con el plan academico</p>
                 </div>
               </div><!-- End Icon Box -->
-
             </div>
           </div>
-
         </div>
-
       </div>
-
     </section><!-- /Why Us Section -->
-
-<section id="trainers-index" class="section trainers-index mt-5">
-
-      <div class="container">
-<div class="section-title text-center">
-      <h2>Desarrolladores</h2>
-    </div>
-        <div class="row g-4">
-
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
-            <div class="member">
-              <div class="member-content">
-                <h4>José Alfredo Benitez Quijada</h4>
-                <span>ProgramadorWeb</span>
-                <p>
-                  
-                </p>
-                <div class="social">
-                    <a href="https://github.com/majufeleer" target="_blank">
-    <i class="bi bi-github"></i>
-                 </a>
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
-            <div class="member">
-     
-              <div class="member-content">
-                <h4>Daniel Alejandro Zuñiga Lara</h4>
-                <span>Asistente de Programador Web </span>
-                <a href="https://github.com/majufeleer" target="_blank">
-                <div class="social">
-                  <i class="bi bi-github"></i>
-                 </a
-                </div>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
-
-          
-        </div>
-
-      </div>
-
-    </section><!-- /Trainers Index Section -->
-
-  </main>
-
-  <footer id="footer" class="footer position-relative light-background">
-
+    <!-- /Why Us Section -->
+<!-- Stats Section -->
+<section id="stats" class="section mt-5">
   <div class="container">
-    <div class="row justify-content-center">
+    <div class="section-title text-center">
+      <span style="
+        display: inline-block;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #1861D9;
+        padding-bottom: 8px;
+        border-bottom: 2px solid #1861D9;
+        margin-bottom: 30px;
+      ">Nuestros números</span>
+    </div>
 
-      <div class="col-lg-4 col-md-6 footer-links text-center">
-        <h4>Nuestros Servicios</h4>
-        <ul>
-          <li><img src="assets/img/viñeta.png" width="20"><a href="#">Diseño Web</a></li>
-          <li><img src="assets/img/viñeta.png" width="20"><a href="#">Sitios Web</a></li>
-          <li><img src="assets/img/viñeta.png" width="20"><a href="#">Desarrollo de Sistemas Stand Alone</a></li>
-          <li><img src="assets/img/viñeta.png" width="20"><a href="#">Testeo de Software</a></li>
-          <li><img src="assets/img/viñeta.png" width="20"><a href="#">Implementacion de Sistemas Empotrados</a></li>
-        </ul>
-      </div>
+    <div class="row g-3 justify-content-center">
+
+      <!-- Stat 1 -->
+      <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="100">
+        <div class="member d-flex align-items-center" style="
+          background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+          border-radius: 12px;
+          padding: 20px 22px;
+          width: 100%;
+          border: 1px solid rgba(24, 97, 217, 0.3);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 18px rgba(24,97,217,0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)';">
+
+          <div style="
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6, #1861D9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+          ">
+            <i class="bi bi-person-badge" style="font-size: 20px; color: #fff;"></i>
+          </div>
+
+          <div class="member-content" style="flex: 1;">
+            <h3 style="color: #fff; margin: 0; font-size: 28px; font-weight: 700;">6</h3>
+            <span style="color: #4C93F8; font-size: 13px; font-weight: 600;">Profesores disponibles</span>
+          </div>
+        </div>
+      </div><!-- End Stat 1 -->
+
+      <!-- Stat 2 -->
+      <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="200">
+        <div class="member d-flex align-items-center" style="
+          background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+          border-radius: 12px;
+          padding: 20px 22px;
+          width: 100%;
+          border: 1px solid rgba(24, 97, 217, 0.3);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 18px rgba(24,97,217,0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)';">
+
+          <div style="
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6, #1861D9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+          ">
+            <i class="bi bi-grid-3x3-gap" style="font-size: 20px; color: #fff;"></i>
+          </div>
+
+          <div class="member-content" style="flex: 1;">
+            <h3 style="color: #fff; margin: 0; font-size: 28px; font-weight: 700;">4</h3>
+            <span style="color: #4C93F8; font-size: 13px; font-weight: 600;">Áreas de especialidad</span>
+          </div>
+        </div>
+      </div><!-- End Stat 2 -->
+
+      <!-- Stat 3 -->
+      <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="300">
+        <div class="member d-flex align-items-center" style="
+          background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+          border-radius: 12px;
+          padding: 20px 22px;
+          width: 100%;
+          border: 1px solid rgba(24, 97, 217, 0.3);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        " onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 8px 18px rgba(24,97,217,0.35)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)';">
+
+          <div style="
+            width: 52px;
+            height: 52px;
+            min-width: 52px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3B82F6, #1861D9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+          ">
+            <i class="bi bi-gift" style="font-size: 20px; color: #fff;"></i>
+          </div>
+
+          <div class="member-content" style="flex: 1;">
+            <h3 style="color: #fff; margin: 0; font-size: 24px; font-weight: 700;">100%</h3>
+            <span style="color: #4C93F8; font-size: 13px; font-weight: 600;">Asesorías gratuitas</span>
+          </div>
+        </div>
+      </div><!-- End Stat 3 -->
 
     </div>
   </div>
+</section><!-- /Stats Section -->
+  </main>
+
+ <footer id="footer" class="footer position-relative light-background">
+
+    <div class="container footer-top">
+      <div class="row gy-4">
+        <div class="col-lg-4 col-md-6 footer-about">
+          <a href="index.html" class="logo d-flex align-items-center">
+            <span class="sitename">AsesoriaSoft</span>
+          </a>
+          <div class="footer-contact pt-3">
+            <p>Josè Alfredo Benitez Quijada</p>
+            <p class="mt-3"><strong>Celular:</strong> <span>6421004951</span></p>
+            <p><strong>Email:</strong> <span>bjosealfredo99@gmail.com</span></p>
+          </div>
+            <div class="footer-contact pt-3">
+            <p>Daniel Alejandro Zuñiga Lara</p>
+            <p class="mt-3"><strong>Celular:</strong> <span>642 115 4606</span></p>
+            <p><strong>Email:</strong> <span>daniel.zuniga207827@potros.itson.edu.mx</span></p>
+          </div>
+        </div>
+
 
 </footer>
 
@@ -277,7 +656,151 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+<div id="toastNotif" style="
+  display: none;
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+  border: 1px solid rgba(24, 97, 217, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  padding: 18px 24px;
+  z-index: 10000;
+  min-width: 300px;
+  max-width: 90%;
+  align-items: center;
+  gap: 14px;
+">
+  <div id="toastIcon" style="
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "></div>
+  <p id="toastMsg" style="color: #fff; margin: 0; font-size: 14px; line-height: 1.4;"></p>
+</div>
+  
+ <script>
+  function mostrarToast(mensaje, tipo) {
+    var toast = document.getElementById('toastNotif');
+    var icon = document.getElementById('toastIcon');
+    var msg = document.getElementById('toastMsg');
 
+    msg.textContent = mensaje;
+
+    if (tipo === 'exito') {
+      icon.style.background = 'linear-gradient(135deg, #3B82F6, #1861D9)';
+      icon.innerHTML = '<i class="bi bi-check-lg" style="color: #fff; font-size: 20px;"></i>';
+    } else {
+      icon.style.background = 'linear-gradient(135deg, #E24B4A, #A32D2D)';
+      icon.innerHTML = '<i class="bi bi-x-lg" style="color: #fff; font-size: 18px;"></i>';
+    }
+
+    toast.style.display = 'flex';
+
+    setTimeout(function() {
+      toast.style.display = 'none';
+    }, 3500);
+  }
+</script> 
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { 
+    getAuth, 
+    createUserWithEmailAndPassword, 
+    signInWithEmailAndPassword 
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import {
+    getFirestore,
+    doc,
+    setDoc,
+    getDoc
+  } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_LDBVAlQzNzUwzVbFaEXi2Y5icjCw6XE",
+    authDomain: "asesoriasoft-503cf.firebaseapp.com",
+    projectId: "asesoriasoft-503cf",
+    storageBucket: "asesoriasoft-503cf.firebasestorage.app",
+    messagingSenderId: "727022664759",
+    appId: "1:727022664759:web:fbdb2dae9f89332dfb53b2",
+    measurementId: "G-LJ2QLCFH8T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  function traducirErrorFirebase(codigo) {
+    const errores = {
+      'auth/invalid-credential': 'Correo o contraseña incorrectos.',
+      'auth/user-not-found': 'No existe una cuenta con ese correo.',
+      'auth/wrong-password': 'La contraseña es incorrecta.',
+      'auth/invalid-email': 'El correo no es válido.',
+      'auth/too-many-requests': 'Demasiados intentos. Intenta más tarde.',
+      'auth/email-already-in-use': 'Ya existe una cuenta con ese correo.',
+      'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres.',
+      'auth/network-request-failed': 'Error de conexión. Revisa tu internet.'
+    };
+    return errores[codigo] || 'Ocurrió un error. Intenta de nuevo.';
+  }
+
+  window.registrarUsuario = function(email, password, nombre, celular, semestre) {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const uid = userCredential.user.uid;
+       return setDoc(doc(db, "usuarios", uid), {
+          nombre: nombre,
+          correo: email.trim().toLowerCase(),
+          celular: celular,
+          semestre: semestre,
+          fechaRegistro: new Date().toISOString()
+        });
+      })
+      .then(() => {
+        mostrarToast("¡Registro exitoso! Bienvenido.", "exito");
+        document.getElementById('registerModal').style.display = 'none';
+      })
+      .catch((error) => {
+        mostrarToast(traducirErrorFirebase(error.code), "error");
+      });
+  };
+
+  window.iniciarSesion = function(email, password) {
+  const btn = document.getElementById('btnLogin');
+  const textoOriginal = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<i class="bi bi-arrow-repeat" style="animation: girar 1s linear infinite; font-size: 20px;"></i>';
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      const uid = userCredential.user.uid;
+      return getDoc(doc(db, "usuarios", uid));
+    })
+    .then((docSnap) => {
+      if (!docSnap.exists()) {
+        // La cuenta existe en Authentication pero no es un alumno (ej. es un maestro)
+        return auth.signOut().then(() => {
+          mostrarToast("Esta cuenta no está registrada como alumno.", "error");
+          btn.disabled = false;
+          btn.innerHTML = textoOriginal;
+        });
+      }
+      const nombre = docSnap.data().nombre || "usuario";
+      localStorage.setItem('nombreUsuario', nombre);
+      window.location.href = "starter-page.html?bienvenida=true";
+    })
+    .catch((error) => {
+      mostrarToast("No pudiste iniciar sesión.", "error");
+      btn.disabled = false;
+      btn.innerHTML = textoOriginal;
+    });
+};
+</script>
 </body>
 
 </html>

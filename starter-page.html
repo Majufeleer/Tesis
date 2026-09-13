@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Starter Page - Mentor Bootstrap Template</title>
+  <title>Mi perfil</title>
   <meta name="description" content="">
   <meta name="keywords" content="">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
-
+  <link href="assets/img/favicon.svg" rel="icon">
+  
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -36,90 +34,888 @@
   ======================================================== -->
 </head>
 
-<body class="starter-page-page">
+<style>
+  @keyframes girar {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
 
+  /* Solución para eliminar la línea del medio */
+  .page-title, 
+  .page-title .heading {
+    border: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+
+  .page-title::before,
+  .page-title::after,
+  .page-title .heading::before,
+  .page-title .heading::after {
+    display: none !important;
+  }
+
+  /* ============================================================
+     Barra de herramientas de la bandeja (botón agendar cita)
+  ============================================================ */
+  .bandeja-toolbar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+  }
+
+  .btn-agendar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(24, 97, 217, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .btn-agendar:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(24, 97, 217, 0.45);
+  }
+
+  .bandeja-titulo {
+    font-family: "Poppins", sans-serif;
+    color: #fff;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0 0 20px auto;
+    display: table;
+    padding: 8px 26px;
+    border: 2px solid #1861D9;
+    border-radius: 30px;
+    background: #0B1F3A;
+  }
+
+  /* ============================================================
+     Mi perfil / Mi estado (dentro de la lista de maestros)
+  ============================================================ */
+  .mi-perfil-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 18px 20px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .mi-perfil-info { min-width: 0; flex: 1; }
+
+  .mi-perfil-nombre {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mi-perfil-mini .estado-selector-btn {
+    padding: 5px 12px;
+    font-size: 12.5px;
+    gap: 6px;
+  }
+
+  .mi-perfil-mini .estado-menu {
+    left: 0;
+    transform: none;
+  }
+
+  .estado-selector {
+    position: relative;
+    display: inline-block;
+  }
+
+  .estado-selector-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    transition: background 0.2s ease;
+  }
+
+  .estado-selector-btn:hover { background: rgba(255,255,255,0.14); }
+
+  .estado-selector-btn i { font-size: 12px; opacity: .8; }
+
+  .estado-punto {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .estado-punto.activo { background: #22C55E; }
+  .estado-punto.ausente { background: #F59E0B; }
+  .estado-punto.ocupado { background: #EF4444; }
+  .estado-punto.no-disponible { background: #64748B; }
+
+  .estado-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.35);
+    padding: 8px;
+    min-width: 200px;
+    z-index: 20;
+    text-align: left;
+  }
+
+  .estado-menu.abierto { display: block; }
+
+  .estado-opcion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 10px;
+    color: #E8EAF0;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .estado-opcion:hover { background: rgba(255,255,255,0.08); }
+
+  /* ============================================================
+     Bandeja de entrada / mini chat
+  ============================================================ */
+  .inbox-card {
+    background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+    border-radius: 18px;
+    border: 1px solid rgba(24, 97, 217, 0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    overflow: hidden;
+    width: 100%;
+  }
+
+  .inbox-wrapper {
+    display: flex;
+    width: 100%;
+    min-height: 560px;
+  }
+
+  @media (max-width: 900px) {
+    .inbox-wrapper { flex-direction: column; min-height: auto; }
+    .inbox-list { width: 100% !important; border-right: none !important; border-bottom: 1px solid rgba(255,255,255,0.08); max-height: 340px; }
+  }
+
+  .inbox-list {
+    width: 330px;
+    min-width: 270px;
+    border-right: 1px solid rgba(255,255,255,0.07);
+    display: flex;
+    flex-direction: column;
+    background: rgba(0,0,0,0.12);
+  }
+
+  .inbox-list-header {
+    padding: 22px 22px 4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .inbox-list-header h4 {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+    margin: 0;
+    opacity: .85;
+  }
+
+  .inbox-list-header .contador {
+    color: #4C93F8;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: rgba(76, 147, 248, 0.12);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  .inbox-search {
+    padding: 14px 20px 16px;
+    position: relative;
+  }
+
+  .inbox-search i {
+    position: absolute;
+    left: 34px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #8b93a7;
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  .inbox-search input {
+    width: 100%;
+    border: 1px solid transparent;
+    outline: none;
+    background: rgba(255,255,255,0.95);
+    border-radius: 30px;
+    padding: 11px 16px 11px 40px;
+    font-size: 14px;
+    color: #222;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+
+  .inbox-search input:focus {
+    box-shadow: 0 0 0 3px rgba(24, 97, 217, 0.35);
+  }
+
+  .lista-maestros-scroll {
+    overflow-y: auto;
+    flex: 1;
+    padding: 4px 10px 14px;
+    display: block;
+  }
+
+  .lista-maestros-scroll.visible {
+    display: block;
+  }
+
+  .lista-maestros-scroll::-webkit-scrollbar { width: 6px; }
+  .lista-maestros-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+  .maestro-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 12px;
+    margin: 2px 0;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: background 0.18s ease, transform 0.12s ease;
+  }
+.badge-no-leido {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #1861D9;
+  margin-left: auto;
+  box-shadow: 0 0 0 3px rgba(24,97,217,0.25);
+}
+.maestro-item.no-leido {
+  background: rgba(24, 97, 217, 0.1);
+}
+.maestro-item.no-leido .maestro-nombre {
+  color: #fff;
+  font-weight: 800;
+}
+.maestro-item.no-leido .maestro-sub {
+  color: #cfe0ff;
+  font-weight: 600;
+}
+  .maestro-item:hover {
+    background: rgba(255,255,255,0.055);
+  }
+
+  .maestro-item.active {
+    background: rgba(24, 97, 217, 0.18);
+    box-shadow: inset 3px 0 0 0 #1861D9;
+  }
+
+  /* Punto de estado sobre el avatar (lista y encabezado del chat) */
+  .avatar-wrap {
+    position: relative;
+    min-width: 44px;
+  }
+
+  .avatar-estado-punto {
+    position: absolute;
+    bottom: -1px;
+    right: -1px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    border: 2px solid #1e1e2f;
+    box-sizing: content-box;
+  }
+
+  .avatar-estado-punto.activo { background: #22C55E; }
+  .avatar-estado-punto.ausente { background: #F59E0B; }
+  .avatar-estado-punto.ocupado { background: #EF4444; }
+  .avatar-estado-punto.no-disponible { background: #64748B; }
+
+  .chat-header-estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    margin: 2px 0 0;
+  }
+
+  .chat-header-estado .estado-punto {
+    width: 8px;
+    height: 8px;
+  }
+
+  .chat-header-estado.activo { color: #22C55E; }
+  .chat-header-estado.ausente { color: #F59E0B; }
+  .chat-header-estado.ocupado { color: #EF4444; }
+  .chat-header-estado.no-disponible { color: #94A3B8; }
+
+  /* Panel de chat */
+  .chat-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    background: radial-gradient(circle at top right, rgba(24,97,217,0.06), transparent 55%);
+  }
+
+  .chat-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 18px 26px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .chat-header-info {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .btn-vaciar-chat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    color: #F87171;
+    padding: 7px 14px;
+    border-radius: 30px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s ease, transform 0.12s ease;
+  }
+
+  .btn-vaciar-chat:hover {
+    background: rgba(239, 68, 68, 0.2);
+    transform: translateY(-1px);
+  }
+  .chat-header-acciones {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .btn-eliminar-chat {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(148, 163, 184, 0.12);
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    color: #CBD5E1;
+    padding: 7px 14px;
+    border-radius: 30px;
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.18s ease, transform 0.12s ease;
+  }
+
+  .btn-eliminar-chat:hover {
+    background: rgba(148, 163, 184, 0.22);
+    transform: translateY(-1px);
+  }
+  .maestro-nombre {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .maestro-sub {
+    color: #8b93a7;
+    font-size: 12.5px;
+    margin: 2px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 700;
+    letter-spacing: .3px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+  }
+
+  .avatar.chico { width: 38px; height: 38px; font-size: 13px; }
+  .avatar.grande { width: 46px; height: 46px; font-size: 16px; }
+
+  .chat-header .maestro-nombre { font-size: 15.5px; }
+  .chat-header .maestro-sub { font-size: 12.5px; }
+
+  .chat-mensajes {
+    flex: 1;
+    padding: 24px 28px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-height: 300px;
+  }
+
+  .chat-mensajes::-webkit-scrollbar { width: 6px; }
+  .chat-mensajes::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+
+  .chat-dia-divisor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 14px 0 10px;
+  }
+
+  .chat-dia-divisor span {
+    background: rgba(255,255,255,0.06);
+    color: #9CA3AF;
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: .2px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    text-transform: capitalize;
+  }
+
+  .msg-fila {
+    display: flex;
+    margin: 6px 0;
+  }
+  .msg-fila.enviado { justify-content: flex-end; }
+  .msg-fila.recibido { justify-content: flex-start; }
+
+  .msg {
+    max-width: 68%;
+    padding: 11px 16px;
+    border-radius: 16px;
+    font-size: 14.5px;
+    line-height: 1.45;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  }
+
+  .msg.recibido {
+    background: #33334a;
+    color: #E8EAF0;
+    border-bottom-left-radius: 5px;
+  }
+
+  .msg.enviado {
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    color: #fff;
+    border-bottom-right-radius: 5px;
+  }
+
+  .msg-hora {
+    display: block;
+    font-size: 10.5px;
+    opacity: .65;
+    margin-top: 4px;
+  }
+
+  .chat-vacio {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #7C879C;
+    text-align: center;
+    padding: 40px;
+  }
+
+  .chat-vacio .icono-circulo {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: rgba(76, 147, 248, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+
+  .chat-vacio i { font-size: 34px; color: #4C93F8; }
+  .chat-vacio p { margin: 0; font-size: 15px; }
+  .chat-vacio p.titulo { color: #cfd4e0; font-size: 16.5px; font-weight: 600; margin-bottom: 4px; }
+
+  .chat-input-bar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 22px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .chat-input-bar input {
+    flex: 1;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 30px;
+    padding: 11px 18px;
+    color: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .chat-input-bar input:focus {
+    border-color: rgba(24, 97, 217, 0.55);
+    background: rgba(255,255,255,0.09);
+  }
+
+  .chat-input-bar input::placeholder { color: #6B7280; }
+
+  .chat-send-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    border-radius: 50%;
+    border: none;
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(24, 97, 217, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .chat-send-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(24, 97, 217, 0.45);
+  }
+
+  .chat-send-btn:active { transform: translateY(0); }
+
+  /* ============================================================
+     Buzón de sugerencias (modal)
+  ============================================================ */
+  .buzon-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(8,10,20,0.6);
+    backdrop-filter: blur(3px);
+    z-index: 10001;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .buzon-modal {
+    background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+    border: 1px solid rgba(24, 97, 217, 0.3);
+    border-radius: 18px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    width: 90%;
+    max-width: 460px;
+    padding: 30px 28px;
+    animation: aparecer 0.18s ease;
+  }
+
+  @keyframes aparecer {
+    from { opacity: 0; transform: translateY(8px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .buzon-icono {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 14px rgba(24, 97, 217, 0.35);
+  }
+
+  .buzon-icono i { color: #fff; font-size: 22px; }
+
+  .buzon-modal h3 {
+    color: #fff;
+    font-size: 19px;
+    font-weight: 700;
+    margin: 0 0 6px;
+  }
+
+  .buzon-modal p.subtitulo {
+    color: #9CA3AF;
+    font-size: 13.5px;
+    margin: 0 0 18px;
+  }
+
+  .buzon-modal textarea {
+    width: 100%;
+    min-height: 120px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 12px;
+    padding: 14px;
+    color: #fff;
+    font-size: 14px;
+    resize: vertical;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s ease;
+  }
+
+  .buzon-modal textarea:focus { border-color: rgba(24, 97, 217, 0.55); }
+  .buzon-modal textarea::placeholder { color: #6B7280; }
+
+  .buzon-modal-botones {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .buzon-btn {
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.12s ease;
+  }
+
+  .buzon-btn.cancelar {
+    background: transparent;
+    color: #9CA3AF;
+  }
+  .buzon-btn.cancelar:hover { color: #fff; }
+
+  .buzon-btn.enviar {
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(24, 97, 217, 0.35);
+  }
+  .buzon-btn.enviar:hover { transform: translateY(-1px); }
+
+  .btn-sugerencias {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #3B82F6, #1861D9);
+    color: #fff;
+    border: none;
+    padding: 9px 20px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 12px;
+    box-shadow: 0 3px 10px rgba(24, 97, 217, 0.4), 0 0 0 0 rgba(59, 130, 246, 0.55);
+    animation: brillo-sugerencias 2.4s ease-in-out infinite;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .btn-sugerencias i {
+    font-size: 15px;
+    transition: transform 0.2s ease;
+  }
+
+  .btn-sugerencias:hover {
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(24, 97, 217, 0.55);
+    animation-play-state: paused;
+  }
+
+  .btn-sugerencias:hover i {
+    transform: rotate(-8deg) scale(1.1);
+  }
+
+  @keyframes brillo-sugerencias {
+    0%   { box-shadow: 0 3px 10px rgba(24, 97, 217, 0.4), 0 0 0 0 rgba(59, 130, 246, 0.45); }
+    70%  { box-shadow: 0 3px 10px rgba(24, 97, 217, 0.4), 0 0 0 9px rgba(59, 130, 246, 0); }
+    100% { box-shadow: 0 3px 10px rgba(24, 97, 217, 0.4), 0 0 0 0 rgba(59, 130, 246, 0); }
+  }
+</style>
+<body class="starter-page-page">
+ 
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
-
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <!-- Uncomment the line below if you also wish to use an image logo -->
-        <!-- <img src="assets/img/logo.webp" alt=""> -->
-        <h1 class="sitename">Mentor</h1>
+      <a href="starter-page.html" class="logo d-flex align-items-center me-auto">
+        <h1 class="sitename">Asesoriasoft</h1>
       </a>
-
       <nav id="navmenu" class="navmenu">
-        <ul>
-          <li><a href="index.html">Home<br></a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="courses.html">Courses</a></li>
-          <li><a href="trainers.html">Trainers</a></li>
-          <li><a href="events.html">Events</a></li>
-          <li><a href="pricing.html">Pricing</a></li>
-          <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li>
-          <li><a href="contact.html">Contact</a></li>
-        </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
+     <a href="#" onclick="abrirBuzon(); return false;" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  color: #1861D9;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 12px;
+  border: 1.5px solid #1861D9;
+  transition: background 0.3s ease, color 0.3s ease;
+" onmouseover="this.style.background='#1861D9'; this.style.color='#fff';" onmouseout="this.style.background='transparent'; this.style.color='#1861D9';">
+  <i class="bi bi-chat-square-text"></i> Buzón de sugerencias
+</a>
 
-      <a class="btn-getstarted" href="courses.html">Get Started</a>
-
+     <a href="#" onclick="cerrarSesion(); return false;" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #1861D9;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 12px;
+  transition: background 0.3s ease;
+" onmouseover="this.style.background='#144fb0';" onmouseout="this.style.background='#1861D9';">
+  <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+</a>
     </div>
   </header>
-
   <main class="main">
 
+
     <!-- Page Title -->
-    <div class="page-title" data-aos="fade">
-      <div class="heading">
-        <div class="container">
-          <div class="row d-flex justify-content-center text-center">
-            <div class="col-lg-8">
-              <h1>Starter Page</h1>
-              <p class="mb-0">Odio et unde deleniti. Deserunt numquam exercitationem. Officiis quo odio sint voluptas consequatur ut a odio voluptatem. Sit dolorum debitis veritatis natus dolores. Quasi ratione sint. Sit quaerat ipsum dolorem.</p>
+   <div class="page-title" data-aos="fade" style="
+  background: linear-gradient(rgba(10, 15, 30, 0.75), rgba(10, 15, 30, 0.75)), url('assets/img/tipos-de-software.jpg');
+  background-size: cover;
+  background-position: center;
+  padding: 80px 0;
+">
+  <div class="heading">
+    <div class="container">
+      <div class="row d-flex justify-content-center text-center">
+        <div class="col-lg-8">
+          <h1 style="font-size: 48px;"><i class="bi bi-person-circle" id="userIcon" style="font-size: 1em; vertical-align: -0.1em;"></i> <span id="userNameDisplay">Cargando...</span></h1>
+          <p class="mb-0" style="font-size: 18px;">Bienvenido a tu panel de AsesoriaSoft</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div><!-- End Page Title -->
+
+<section id="bandeja" class="section">
+
+  <div style="padding: 0 40px;" data-aos="fade-up">
+
+    <h2 class="bandeja-titulo">Bandeja de Entrada</h2>
+
+    <div class="inbox-card">
+      <div class="inbox-wrapper">
+
+        <!-- Lista de maestros -->
+        <div class="inbox-list">
+
+          <!-- Mi perfil / mi estado -->
+          <div class="mi-perfil-mini">
+            <div class="avatar chico" id="miPerfilAvatar" style="background: linear-gradient(135deg, #3B82F6, #1861D9);">T</div>
+            <div class="mi-perfil-info">
+              <div class="mi-perfil-nombre" id="miPerfilNombre">Tú</div>
+              <div class="estado-selector" id="estadoSelector">
+                <button type="button" class="estado-selector-btn" onclick="toggleEstadoMenu(event)">
+                  <span class="estado-punto activo" id="estadoPuntoActual"></span>
+                  <span id="estadoTextoActual">Activo</span>
+                  <i class="bi bi-chevron-down"></i>
+                </button>
+                <div class="estado-menu" id="estadoMenu">
+                  <div class="estado-opcion" onclick="cambiarEstado('activo')"><span class="estado-punto activo"></span> Activo</div>
+                  <div class="estado-opcion" onclick="cambiarEstado('ausente')"><span class="estado-punto ausente"></span> Ausente</div>
+                  <div class="estado-opcion" onclick="cambiarEstado('ocupado')"><span class="estado-punto ocupado"></span> Ocupado</div>
+                  <div class="estado-opcion" onclick="cambiarEstado('no-disponible')"><span class="estado-punto no-disponible"></span> No disponible</div>
+                </div>
+              </div>
             </div>
           </div>
+
+          <div class="inbox-list-header">
+            <h4>Bandeja de entrada</h4>
+            <span class="contador" id="contadorLinea">0 maestros</span>
+          </div>
+          <div class="inbox-search">
+            <i class="bi bi-search"></i>
+            <input type="text" id="buscarMaestro" placeholder="Buscar maestro" oninput="filtrarMaestros(this.value)">
+          </div>
+          <div class="lista-maestros-scroll" id="listaMaestros"></div>
         </div>
-      </div>
-      <nav class="breadcrumbs">
-        <div class="container">
-          <ol>
-            <li><a href="index.html">Home</a></li>
-            <li class="current">Starter Page</li>
-          </ol>
+
+        <!-- Mini chat -->
+        <div class="chat-panel" id="chatPanel">
+          <div class="chat-vacio">
+            <div class="icono-circulo"><i class="bi bi-chat-dots"></i></div>
+            <p class="titulo">Tu bandeja está lista</p>
+            <p>Selecciona un maestro de la lista para comenzar a chatear.</p>
+          </div>
         </div>
-      </nav>
-    </div><!-- End Page Title -->
 
-    <!-- Starter Section Section -->
-    <section id="starter-section" class="starter-section section">
-
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Starter Section</h2>
-        <p>Your Description Here<br></p>
-      </div><!-- End Section Title -->
-
-      <div class="container" data-aos="fade-up">
-        <p>Use this page as a starter for your own custom pages.</p>
       </div>
+    </div>
+  </div>
 
-    </section><!-- /Starter Section Section -->
+</section>
+    <!-- End Page Title -->
+
+ 
 
   </main>
 
@@ -129,66 +925,32 @@
       <div class="row gy-4">
         <div class="col-lg-4 col-md-6 footer-about">
           <a href="index.html" class="logo d-flex align-items-center">
-            <span class="sitename">Mentor</span>
+            <span class="sitename">AsesoriaSoft</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>A108 Adam Street</p>
-            <p>New York, NY 535022</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>+1 5589 55488 55</span></p>
-            <p><strong>Email:</strong> <span>info@example.com</span></p>
+            <p>Josè Alfredo Benitez Quijada</p>
+            <p class="mt-3"><strong>Celular:</strong> <span>6421004951</span></p>
+            <p><strong>Email:</strong> <span>bjosealfredo99@gmail.com</span></p>
           </div>
-          <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+            <div class="footer-contact pt-3">
+            <p>Daniel Alejandro Zuñiga Lara</p>
+            <p class="mt-3"><strong>Celular:</strong> <span>642 115 4606</span></p>
+            <p><strong>Email:</strong> <span>daniel.zuniga207827@potros.itson.edu.mx</span></p>
           </div>
         </div>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Useful Links</h4>
-          <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">About us</a></li>
-            <li><a href="#">Services</a></li>
-            <li><a href="#">Terms of service</a></li>
-            <li><a href="#">Privacy policy</a></li>
-          </ul>
-        </div>
+          </footer>
 
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-          </form>
-        </div>
-
-      </div>
-    </div>
+       
 
     <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1 sitename">Mentor</strong> <span>All Rights Reserved</span></p>
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">AsesoriaSoft</strong> <span>All Rights Reserved</span></p>
       <div class="credits">
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> | <a href="https://bootstrapmade.com/tools/">DevTools</a>
+        
       </div>
     </div>
 
@@ -210,7 +972,900 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+<div id="toastNotif" style="
+  display: none;
+  position: fixed;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+  border: 1px solid rgba(24, 97, 217, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+  padding: 18px 24px;
+  z-index: 10000;
+  min-width: 300px;
+  max-width: 90%;
+  align-items: center;
+  gap: 14px;
+">
+  <div id="toastIcon" style="
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  "></div>
+  <p id="toastMsg" style="color: #fff; margin: 0; font-size: 14px; line-height: 1.4;"></p>
+</div>
 
+<!-- Modal buzón de sugerencias -->
+<div class="buzon-overlay" id="buzonOverlay">
+  <div class="buzon-modal">
+    <div class="buzon-icono"><i class="bi bi-chat-square-text"></i></div>
+    <h3>Buzón de sugerencias</h3>
+    <p class="subtitulo">Cuéntanos qué podemos mejorar en AsesoriaSoft.</p>
+    <textarea id="textoSugerencia" placeholder="Escribe tu sugerencia aquí..."></textarea>
+    <div class="buzon-modal-botones">
+      <button class="buzon-btn cancelar" onclick="cerrarBuzon()">Cancelar</button>
+      <button class="buzon-btn enviar" onclick="enviarSugerencia()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal agendar cita -->
+<div class="buzon-overlay" id="citaOverlay">
+  <div class="buzon-modal">
+    <div class="buzon-icono"><i class="bi bi-calendar-plus"></i></div>
+    <h3>Agendar cita</h3>
+    <p class="subtitulo">Elige con qué maestro, fecha y hora te gustaría tu asesoría.</p>
+
+    <label style="display:block; color:#9CA3AF; font-size:13px; margin-bottom:6px;">Maestro</label>
+    <select id="citaMaestro" style="
+      width:100%; padding:11px 14px; border-radius:10px;
+      border:1px solid rgba(255,255,255,0.12); background:#1e1e2f;
+      color:#fff; font-size:14px; outline:none; box-sizing:border-box; margin-bottom:16px;
+    "></select>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px;">
+      <div>
+        <label style="display:block; color:#9CA3AF; font-size:13px; margin-bottom:6px;">Fecha</label>
+        <input type="date" id="citaFecha" style="
+          width:100%; padding:10px 12px; border-radius:10px;
+          border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06);
+          color:#fff; font-size:14px; outline:none; box-sizing:border-box;
+        ">
+      </div>
+      <div>
+        <label style="display:block; color:#9CA3AF; font-size:13px; margin-bottom:6px;">Hora</label>
+        <input type="time" id="citaHora" style="
+          width:100%; padding:10px 12px; border-radius:10px;
+          border:1px solid rgba(255,255,255,0.12); background:rgba(255,255,255,0.06);
+          color:#fff; font-size:14px; outline:none; box-sizing:border-box;
+        ">
+      </div>
+    </div>
+
+    <label style="display:block; color:#9CA3AF; font-size:13px; margin-bottom:6px;">Motivo (opcional)</label>
+    <textarea id="citaMotivo" placeholder="¿Sobre qué tema necesitas la asesoría?" style="min-height:80px;"></textarea>
+
+    <div class="buzon-modal-botones">
+      <button class="buzon-btn cancelar" onclick="cerrarCita()">Cancelar</button>
+      <button class="buzon-btn enviar" onclick="enviarCita()">Agendar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de confirmación genérico (reemplaza al confirm() del navegador) -->
+<div class="buzon-overlay" id="confirmOverlay">
+  <div class="buzon-modal" style="max-width:400px;">
+    <div class="buzon-icono" style="background: linear-gradient(135deg, #F87171, #B91C1C);">
+      <i class="bi bi-exclamation-triangle"></i>
+    </div>
+    <h3 id="confirmTitulo">¿Confirmar acción?</h3>
+    <p class="subtitulo" id="confirmMensaje"></p>
+    <div class="buzon-modal-botones">
+      <button class="buzon-btn cancelar" onclick="cerrarConfirm()">Cancelar</button>
+      <button class="buzon-btn enviar" id="confirmBtnAceptar" style="background: linear-gradient(135deg, #F87171, #B91C1C); box-shadow: 0 4px 12px rgba(239,68,68,0.35);">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+  <script>
+  function mostrarToast(mensaje, tipo) {
+    var toast = document.getElementById('toastNotif');
+    var icon = document.getElementById('toastIcon');
+    var msg = document.getElementById('toastMsg');
+
+    msg.textContent = mensaje;
+
+    if (tipo === 'exito') {
+      icon.style.background = 'linear-gradient(135deg, #3B82F6, #1861D9)';
+      icon.innerHTML = '<i class="bi bi-check-lg" style="color: #fff; font-size: 20px;"></i>';
+    } else {
+      icon.style.background = 'linear-gradient(135deg, #E24B4A, #A32D2D)';
+      icon.innerHTML = '<i class="bi bi-x-lg" style="color: #fff; font-size: 18px;"></i>';
+    }
+
+    toast.style.display = 'flex';
+
+    setTimeout(function() {
+      toast.style.display = 'none';
+    }, 3500);
+  }
+
+  // ===== Confirmación genérica (reemplaza al confirm() nativo) =====
+  let confirmCallback = null;
+
+  function mostrarConfirm(titulo, mensaje, onAceptar) {
+    document.getElementById('confirmTitulo').textContent = titulo;
+    document.getElementById('confirmMensaje').textContent = mensaje;
+    confirmCallback = onAceptar;
+    document.getElementById('confirmOverlay').style.display = 'flex';
+  }
+
+  function cerrarConfirm() {
+    document.getElementById('confirmOverlay').style.display = 'none';
+    confirmCallback = null;
+  }
+
+  document.getElementById('confirmBtnAceptar').addEventListener('click', function() {
+    const cb = confirmCallback;
+    cerrarConfirm();
+    if (cb) cb();
+  });
+
+  // ===== Buzón de sugerencias =====
+  function abrirBuzon() {
+    document.getElementById('buzonOverlay').style.display = 'flex';
+  }
+  function cerrarBuzon() {
+    document.getElementById('buzonOverlay').style.display = 'none';
+    document.getElementById('textoSugerencia').value = '';
+  }
+  function enviarSugerencia() {
+    var texto = document.getElementById('textoSugerencia').value.trim();
+    if (!texto) {
+      mostrarToast('Escribe algo antes de enviar tu sugerencia.', 'error');
+      return;
+    }
+
+    var usuarioActual = localStorage.getItem('nombreUsuario') || 'Invitado';
+    var boton = document.querySelector('.buzon-btn.enviar');
+    var textoOriginalBoton = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = 'Enviando...';
+
+    window.guardarSugerencia(usuarioActual, texto).then(function() {
+      cerrarBuzon();
+      mostrarToast('¡Gracias! Tu sugerencia fue enviada.', 'exito');
+    }).catch(function(error) {
+      console.error('Error guardando sugerencia:', error);
+      mostrarToast('No se pudo enviar tu sugerencia. Intenta de nuevo.', 'error');
+    }).finally(function() {
+      boton.disabled = false;
+      boton.textContent = textoOriginalBoton;
+    });
+  }
+
+  // ===== Selector de "Mi estado" =====
+  // El estado propio se guarda en localStorage y también se sincroniza a Firestore
+  // (colección "alumnos") para que, si algún día se necesita, se pueda leer desde
+  // otras pantallas. El estado del MAESTRO con el que chateas viene de la colección
+  // "maestros" y se pinta en el header del chat (ver renderChat()).
+  var estadosInfo = {
+    'activo':        { texto: 'Activo',        clase: 'activo' },
+    'ausente':       { texto: 'Ausente',       clase: 'ausente' },
+    'ocupado':       { texto: 'Ocupado',       clase: 'ocupado' },
+    'no-disponible': { texto: 'No disponible', clase: 'no-disponible' }
+  };
+
+  function toggleEstadoMenu(e) {
+    if (e) e.stopPropagation();
+    document.getElementById('estadoMenu').classList.toggle('abierto');
+  }
+
+  function cambiarEstado(estado) {
+    localStorage.setItem('miEstado', estado);
+    pintarEstadoActual(estado);
+    document.getElementById('estadoMenu').classList.remove('abierto');
+    if (window.guardarMiEstado) window.guardarMiEstado(estado);
+  }
+
+  function pintarEstadoActual(estado) {
+    var info = estadosInfo[estado] || estadosInfo['activo'];
+    document.getElementById('estadoTextoActual').textContent = info.texto;
+    document.getElementById('estadoPuntoActual').className = 'estado-punto ' + info.clase;
+  }
+
+  document.addEventListener('click', function(ev) {
+    var wrap = document.getElementById('estadoSelector');
+    var menu = document.getElementById('estadoMenu');
+    if (wrap && menu && !wrap.contains(ev.target)) {
+      menu.classList.remove('abierto');
+    }
+  });
+
+  // ===== Agendar cita =====
+  function abrirCita() {
+    const select = document.getElementById('citaMaestro');
+    select.innerHTML = maestros.map(m => `<option value="${m.id}">${m.nombre}</option>`).join('');
+
+    const hoy = new Date().toISOString().split('T')[0];
+    const fechaInput = document.getElementById('citaFecha');
+    fechaInput.min = hoy;
+    fechaInput.value = '';
+    document.getElementById('citaHora').value = '';
+    document.getElementById('citaMotivo').value = '';
+
+    document.getElementById('citaOverlay').style.display = 'flex';
+  }
+
+  function cerrarCita() {
+    document.getElementById('citaOverlay').style.display = 'none';
+  }
+
+  function enviarCita() {
+    const maestroId = parseInt(document.getElementById('citaMaestro').value, 10);
+    const fecha = document.getElementById('citaFecha').value;
+    const hora = document.getElementById('citaHora').value;
+    const motivo = document.getElementById('citaMotivo').value.trim();
+    const maestro = maestros.find(m => m.id === maestroId);
+
+    if (!maestro || !fecha || !hora) {
+      mostrarToast('Elige maestro, fecha y hora antes de agendar.', 'error');
+      return;
+    }
+
+    const usuarioActual = localStorage.getItem('nombreUsuario') || 'Invitado';
+    const boton = document.querySelector('#citaOverlay .buzon-btn.enviar');
+    const textoOriginal = boton.textContent;
+    boton.disabled = true;
+    boton.textContent = 'Agendando...';
+
+    window.guardarCita(usuarioActual, maestro.nombre, maestro.correo, fecha, hora, motivo)
+      .then(function() {
+        cerrarCita();
+        mostrarToast('¡Cita agendada! Te confirmaremos pronto.', 'exito');
+      })
+      .catch(function(error) {
+        console.error('Error agendando cita:', error);
+        mostrarToast('No se pudo agendar la cita. Intenta de nuevo.', 'error');
+      })
+      .finally(function() {
+        boton.disabled = false;
+        boton.textContent = textoOriginal;
+      });
+  }
+
+  // ===== Bandeja de entrada / mini chat =====
+  const gradientes = [
+    'linear-gradient(135deg, #3B82F6, #1861D9)',
+    'linear-gradient(135deg, #F59E0B, #B45309)',
+    'linear-gradient(135deg, #A855F7, #6D28D9)',
+    'linear-gradient(135deg, #22C55E, #15803D)',
+    'linear-gradient(135deg, #EC4899, #BE185D)'
+  ];
+
+  function iniciales(nombre) {
+    const limpio = nombre.replace(/^Mtro\.?\s|^Mtra\.?\s/i, '');
+    const partes = limpio.trim().split(/\s+/);
+    return ((partes[0]?.[0] || '') + (partes[1]?.[0] || '')).toUpperCase();
+  }
+
+  // Antes el color se sacaba de m.id % gradientes.length, pero eso solo funciona
+  // con números. Los IDs que da Firestore son texto (ej: "aB3xK9..."), así que
+  // convertimos el texto a un número consistente para elegir siempre el mismo color.
+  function colorPorId(id) {
+    let hash = 0;
+    for (let i = 0; i < id.length; i++) {
+      hash = (hash * 31 + id.charCodeAt(i)) % gradientes.length;
+    }
+    return gradientes[Math.abs(hash) % gradientes.length];
+  }
+
+  // Los maestros ya NO viven escritos a mano aquí. Se cargan desde Firestore
+  // (colección "maestros") con la función cargarMaestros() que está más abajo,
+  // en el <script type="module">, porque ahí es donde vive la conexión a Firebase.
+  // Cada maestro trae también su campo "estado" (activo/ausente/ocupado/no-disponible)
+  // que se escucha en tiempo real para reflejarlo aquí sin recargar la página.
+  let maestros = [];
+
+  function claseEstado(estado) {
+    return (estadosInfo[estado] ? estadosInfo[estado].clase : 'activo');
+  }
+
+  function textoEstado(estado) {
+    return (estadosInfo[estado] ? estadosInfo[estado].texto : 'Activo');
+  }
+
+  // ===== Chat en tiempo real (Firestore) =====
+  // Ya NO usamos localStorage para los mensajes. Cada conversación vive en Firestore,
+  // en un "cajón" separado por par alumno-maestro: chats/<tuUid>_<idDelMaestro>/mensajes.
+  // Las funciones que hablan directo con Firestore (escucharChat, enviarMensajeFirestore,
+  // vaciarChatFirestore) están definidas en el <script type="module"> de abajo, porque
+  // ahí es donde vive la conexión "db". Aquí solo las llamamos.
+
+  let maestroActivo = null;
+
+  function renderListaMaestros(filtro) {
+  const cont = document.getElementById('listaMaestros');
+  cont.innerHTML = '';
+
+  const texto = (filtro || '').toLowerCase();
+  const buscando = texto.length > 0;
+
+  let items;
+
+  if (buscando) {
+    items = maestros.filter(m =>
+      m.nombre.toLowerCase().includes(texto)
+    );
+  } else {
+    items = maestros
+      .filter(m => window.chatsActivos && window.chatsActivos[m.id])
+      .sort((a, b) =>
+        (window.chatsActivos[b.id].actualizado || 0) -
+        (window.chatsActivos[a.id].actualizado || 0)
+      );
+  }
+
+  if (items.length === 0) {
+    cont.innerHTML = buscando
+      ? '<p style="color:#7C879C; font-size:13.5px; text-align:center; padding:16px;">No se encontraron maestros.</p>'
+      : '<p style="color:#7C879C; font-size:13.5px; text-align:center; padding:16px;">Aún no tienes conversaciones. Busca un maestro para empezar a chatear.</p>';
+  }
+
+  items.forEach((m) => {
+    const item = document.createElement('div');
+
+    // IMPORTANTE: chatInfo se define ANTES de usarlo en item.className.
+    // Antes estaba declarado más abajo y por eso tirabas
+    // "Cannot access 'chatInfo' before initialization".
+    const chatInfo =
+      window.chatsActivos ? window.chatsActivos[m.id] : null;
+
+    item.className =
+      'maestro-item' +
+      (maestroActivo === m.id ? ' active' : '') +
+      (chatInfo && chatInfo.noLeido ? ' no-leido' : '');
+
+    item.onclick = () => seleccionarMaestro(m.id);
+
+    const grad = colorPorId(m.id);
+
+    const noLeidoHtml =
+      (chatInfo && chatInfo.noLeido)
+        ? '<span class="badge-no-leido"></span>'
+        : '';
+
+    item.innerHTML = `
+      <div class="avatar-wrap">
+        <div class="avatar" style="background:${grad};">
+          ${iniciales(m.nombre)}
+        </div>
+        <span class="avatar-estado-punto ${claseEstado(m.estado)}" title="${textoEstado(m.estado)}"></span>
+      </div>
+
+     <div class="maestro-info">
+  <div class="maestro-nombre">${m.nombre}</div>
+  <div class="maestro-sub">${chatInfo ? chatInfo.ultimoMensaje : ''}</div>
+</div>
+
+      ${noLeidoHtml}
+    `;
+
+    cont.appendChild(item);
+  });
+
+  document.getElementById('contadorLinea').textContent =
+    maestros.length +
+    (maestros.length === 1 ? ' maestro' : ' maestros');
+}
+  function filtrarMaestros(valor) {
+    renderListaMaestros(valor);
+  }
+
+ function seleccionarMaestro(id) {
+  maestroActivo = id;
+  document.getElementById('buscarMaestro').value = '';
+  renderListaMaestros('');
+  renderChat();
+  if (window.marcarChatLeido) window.marcarChatLeido(id);
+}
+  function renderChat() {
+    const panel = document.getElementById('chatPanel');
+    const m = maestros.find(x => x.id === maestroActivo);
+    if (!m) {
+      window.detenerEscuchaChat();
+      panel.innerHTML = `
+        <div class="chat-vacio">
+          <div class="icono-circulo"><i class="bi bi-chat-dots"></i></div>
+          <p class="titulo">Tu bandeja está lista</p>
+          <p>Selecciona un maestro de la lista para comenzar a chatear.</p>
+        </div>`;
+      return;
+    }
+
+    const grad = colorPorId(m.id);
+    const contactoPartes = [m.correo];
+    if (m.celular) contactoPartes.push(m.celular);
+    const contacto = contactoPartes.join(' · ');
+
+    panel.innerHTML = `
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <div class="avatar-wrap">
+            <div class="avatar grande" style="background:${grad};">${iniciales(m.nombre)}</div>
+            <span class="avatar-estado-punto ${claseEstado(m.estado)}" id="chatAvatarEstadoPunto" title="${textoEstado(m.estado)}"></span>
+          </div>
+          <div>
+            <div class="maestro-nombre">${m.nombre}</div>
+            <p class="maestro-sub">${contacto}</p>
+            <div class="chat-header-estado ${claseEstado(m.estado)}" id="chatHeaderEstado">
+              <span class="estado-punto ${claseEstado(m.estado)}"></span>
+              <span id="chatHeaderEstadoTexto">${textoEstado(m.estado)}</span>
+            </div>
+          </div>
+        </div>
+               <div class="chat-header-acciones">
+          <button type="button" class="btn-vaciar-chat" onclick="vaciarChat()">
+            <i class="bi bi-trash3"></i> Vaciar chat
+          </button>
+          <button type="button" class="btn-eliminar-chat" onclick="eliminarChat()">
+            <i class="bi bi-x-circle"></i> Eliminar chat
+          </button>
+        </div>
+      </div>
+      <div class="chat-mensajes" id="chatMensajes"></div>
+      <div class="chat-input-bar">
+        <input type="text" id="chatInput" placeholder="Escribe un mensaje..." onkeydown="if(event.key==='Enter') enviarMensaje();">
+        <button class="chat-send-btn" onclick="enviarMensaje()"><i class="bi bi-send-fill"></i></button>
+      </div>
+    `;
+
+    // Se conecta a Firestore y se queda "escuchando" esta conversación:
+    // cada vez que llega un mensaje nuevo (tuyo o del maestro), pintarMensajes()
+    // se vuelve a llamar solo, sin que tengas que recargar la página.
+    window.escucharChat(m.id, pintarMensajes);
+  }
+
+  // Actualiza SOLO el punto/texto de estado dentro del chat que ya está abierto,
+  // sin re-dibujar todo el panel (para no cortar el listener de mensajes ni el
+  // texto que el usuario esté escribiendo). Se llama cada vez que cambian los
+  // datos de los maestros (por ejemplo, cuando el maestro cambia su estado).
+  function actualizarEstadoEnHeaderChat() {
+    if (!maestroActivo) return;
+    const m = maestros.find(x => x.id === maestroActivo);
+    if (!m) return;
+
+    const punto = document.getElementById('chatAvatarEstadoPunto');
+    const bloqueEstado = document.getElementById('chatHeaderEstado');
+    const textoEl = document.getElementById('chatHeaderEstadoTexto');
+    if (!punto || !bloqueEstado || !textoEl) return;
+
+    const clase = claseEstado(m.estado);
+    punto.className = 'avatar-estado-punto ' + clase;
+    punto.title = textoEstado(m.estado);
+    bloqueEstado.className = 'chat-header-estado ' + clase;
+    bloqueEstado.querySelector('.estado-punto').className = 'estado-punto ' + clase;
+    textoEl.textContent = textoEstado(m.estado);
+  }
+
+  function vaciarChat() {
+    const m = maestros.find(x => x.id === maestroActivo);
+    if (!m) return;
+    mostrarConfirm(
+      'Vaciar chat',
+      '¿Vaciar toda la conversación con ' + m.nombre + '? Esta acción no se puede deshacer.',
+      function() {
+        window.vaciarChatFirestore(m.id).then(function() {
+          mostrarToast('Chat vaciado.', 'exito');
+        }).catch(function(error) {
+          console.error('Error vaciando chat:', error);
+          mostrarToast('No se pudo vaciar el chat.', 'error');
+        });
+      }
+    );
+  }
+  function eliminarChat() {
+    const m = maestros.find(x => x.id === maestroActivo);
+    if (!m) return;
+    mostrarConfirm(
+      'Eliminar chat',
+      '¿Eliminar por completo la conversación con ' + m.nombre + '? Se quitará de tu bandeja y esta acción no se puede deshacer.',
+      function() {
+        window.eliminarChatFirestore(m.id).then(function() {
+          maestroActivo = null;
+          renderListaMaestros(document.getElementById('buscarMaestro').value);
+          renderChat();
+          mostrarToast('Chat eliminado.', 'exito');
+        }).catch(function(error) {
+          console.error('Error eliminando chat:', error);
+          mostrarToast('No se pudo eliminar el chat.', 'error');
+        });
+      }
+    );
+  }
+  // Recibe el arreglo de mensajes que manda escucharChat() cada vez que hay un cambio
+  // en Firestore. Cada mensaje trae { de: 'alumno' | 'maestro', texto, hora, diaClave, diaEtiqueta }.
+  // Se agrupan por día (calculado en horario GMT-7 / America/Hermosillo) y se muestra
+  // un separador ("Hoy", "Ayer" o la fecha) antes del primer mensaje de cada día.
+  function pintarMensajes(mensajes) {
+    const cont = document.getElementById('chatMensajes');
+    if (!cont) return; // el usuario ya cambió de maestro antes de que llegara esta actualización
+    cont.innerHTML = '';
+
+    let diaAnterior = null;
+
+    mensajes.forEach(msg => {
+      if (msg.diaClave && msg.diaClave !== diaAnterior) {
+        const divisor = document.createElement('div');
+        divisor.className = 'chat-dia-divisor';
+        divisor.innerHTML = `<span>${msg.diaEtiqueta}</span>`;
+        cont.appendChild(divisor);
+        diaAnterior = msg.diaClave;
+      }
+
+      const fila = document.createElement('div');
+      fila.className = 'msg-fila ' + (msg.de === 'alumno' ? 'enviado' : 'recibido');
+
+      const burbuja = document.createElement('div');
+      burbuja.className = 'msg ' + (msg.de === 'alumno' ? 'enviado' : 'recibido');
+      burbuja.innerHTML = msg.texto + (msg.hora ? `<span class="msg-hora">${msg.hora}</span>` : '');
+
+      fila.appendChild(burbuja);
+      cont.appendChild(fila);
+    });
+    cont.scrollTop = cont.scrollHeight;
+  }
+
+  function enviarMensaje() {
+    const input = document.getElementById('chatInput');
+    const texto = input.value.trim();
+    if (!texto) return;
+    const m = maestros.find(x => x.id === maestroActivo);
+    if (!m) return;
+    input.value = '';
+    window.enviarMensajeFirestore(m.id, texto).catch(function(error) {
+      console.error('Error enviando mensaje:', error);
+      mostrarToast('No se pudo enviar el mensaje.', 'error');
+    });
+    // No hace falta "pintar" el mensaje a mano: en cuanto Firestore lo guarda,
+    // escucharChat() se entera solo y vuelve a llamar a pintarMensajes().
+  }
+
+  // La lista se pinta hasta que lleguen los maestros de Firestore (ver cargarMaestros()
+  // en el <script type="module"> de abajo, que se llama al final de este archivo).
+</script>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+ import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, onSnapshot, query, where, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyA_LDBVAlQzNzUwzVbFaEXi2Y5icjCw6XE",
+    authDomain: "asesoriasoft-503cf.firebaseapp.com",
+    projectId: "asesoriasoft-503cf",
+    storageBucket: "asesoriasoft-503cf.firebasestorage.app",
+    messagingSenderId: "727022664759",
+    appId: "1:727022664759:web:fbdb2dae9f89332dfb53b2",
+    measurementId: "G-LJ2QLCFH8T"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // Zona horaria fija GMT-7 (Sonora no usa horario de verano, así que
+  // America/Hermosillo siempre es UTC-7, igual que "GMT-7").
+  const ZONA_HORARIA = 'America/Hermosillo';
+
+  // Necesitamos saber quién eres (tu uid de Firebase Auth) para armar el ID de cada
+  // conversación. onAuthStateChanged nos avisa en cuanto Firebase confirma tu sesión
+  // (puede tardar una fracción de segundo en cargar la página).
+ window.uidActual = null;
+
+onAuthStateChanged(auth, function(user) {
+  window.uidActual = user ? user.uid : null;
+  window.escucharChatsActivos();
+});
+
+  // El ID de cada conversación es siempre "<tuUid>_<idDelMaestro>", así cada par
+  // alumno-maestro tiene su propio "cajón" de mensajes en Firestore.
+  function idDeChat(maestroId) {
+    return window.uidActual + '_' + maestroId;
+  }
+// Chats en los que ya tienes conversación, escuchados en tiempo real
+window.chatsActivos = {};
+window.unsubscribeChatsActivos = null;
+
+window.escucharChatsActivos = function() {
+  if (window.unsubscribeChatsActivos) window.unsubscribeChatsActivos();
+  if (!window.uidActual) return;
+
+  const q = query(
+    collection(db, 'chats'),
+    where('alumnoUid', '==', window.uidActual)
+  );
+
+  window.unsubscribeChatsActivos = onSnapshot(q, function(snap) {
+    window.chatsActivos = {};
+
+    snap.forEach(function(docSnap) {
+      const d = docSnap.data();
+
+      window.chatsActivos[d.maestroId] = {
+        ultimoMensaje: d.ultimoMensaje || '',
+        actualizado: d.actualizado ? d.actualizado.toMillis() : 0,
+        noLeido: !!d.noLeidoPorAlumno
+      };
+    });
+
+    renderListaMaestros(document.getElementById('buscarMaestro').value);
+  }, function(error) {
+    console.error('Error escuchando chats activos:', error);
+  });
+};
+
+// Marca como leída la conversación con un maestro
+window.marcarChatLeido = async function(maestroId) {
+  if (!window.uidActual) return;
+
+  try {
+    await setDoc(
+      doc(db, 'chats', idDeChat(maestroId)),
+      { noLeidoPorAlumno: false },
+      { merge: true }
+    );
+  } catch (error) {
+    console.error('Error marcando chat como leído:', error);
+  }
+};
+
+  // Guarda tu propio estado (activo/ausente/ocupado/no-disponible) en Firestore,
+  // en un documento por alumno (colección "alumnos", usando tu uid como ID).
+  // Esto es opcional para esta pantalla, pero deja el estado disponible por si
+  // en el futuro el maestro necesita verlo desde su propio panel.
+   window.guardarMiEstado = async function(estado) {
+    if (!window.uidActual) return;
+    try {
+      await setDoc(doc(db, 'usuarios', window.uidActual), { estado: estado }, { merge: true });
+    } catch (error) {
+      console.error('Error guardando estado:', error);
+    }
+  };
+
+  function formatearHora(fecha) {
+    return fecha.toLocaleTimeString('es-MX', {
+      hour: 'numeric',
+      minute: '2-digit',
+      hour12: true,
+      timeZone: ZONA_HORARIA
+    });
+  }
+
+  // Devuelve una clave única de día ("2026-09-07") y una etiqueta legible
+  // ("Hoy", "Ayer" o "7 de septiembre de 2026"), todo calculado en GMT-7,
+  // sin importar en qué zona horaria esté el navegador de quien lee el chat.
+  function claveDia(fecha) {
+    // en-CA da formato YYYY-MM-DD, perfecto para comparar días.
+    return fecha.toLocaleDateString('en-CA', { timeZone: ZONA_HORARIA });
+  }
+
+  function etiquetaDia(fecha) {
+    const hoy = new Date();
+    const claveFecha = claveDia(fecha);
+    const claveHoy = claveDia(hoy);
+
+    const ayer = new Date(hoy);
+    ayer.setDate(ayer.getDate() - 1);
+    const claveAyer = claveDia(ayer);
+
+    if (claveFecha === claveHoy) return 'Hoy';
+    if (claveFecha === claveAyer) return 'Ayer';
+
+    return fecha.toLocaleDateString('es-MX', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      timeZone: ZONA_HORARIA
+    });
+  }
+
+  // Se queda "escuchando" la conversación con un maestro en tiempo real. Cada vez que
+  // hay un mensaje nuevo (tuyo o del maestro), Firestore avisa solo y se llama a
+  // `callback` con la lista completa de mensajes actualizada — así no hay que recargar
+  // la página ni pedir los mensajes a mano cada vez. Cada mensaje ya trae calculado,
+  // en horario GMT-7, el día al que pertenece (diaClave/diaEtiqueta) para poder
+  // mostrar separadores de día en el chat.
+  window.unsubscribeChatActual = null;
+
+  window.detenerEscuchaChat = function() {
+    if (window.unsubscribeChatActual) {
+      window.unsubscribeChatActual();
+      window.unsubscribeChatActual = null;
+    }
+  };
+
+  window.escucharChat = function(maestroId, callback) {
+    window.detenerEscuchaChat(); // deja de escuchar la conversación anterior, si había una
+    if (!window.uidActual) {
+      console.warn('Todavía no hay sesión lista para abrir el chat.');
+      return;
+    }
+    const chatId = idDeChat(maestroId);
+    const q = query(collection(db, 'chats', chatId, 'mensajes'), orderBy('creada', 'asc'));
+    window.unsubscribeChatActual = onSnapshot(q, function(snap) {
+      const mensajes = [];
+      snap.forEach(function(docSnap) {
+        const d = docSnap.data();
+        const fecha = d.creada ? d.creada.toDate() : null;
+        mensajes.push({
+          de: d.de,
+          texto: d.texto,
+          hora: fecha ? formatearHora(fecha) : '',
+          diaClave: fecha ? claveDia(fecha) : null,
+          diaEtiqueta: fecha ? etiquetaDia(fecha) : ''
+        });
+      });
+      callback(mensajes);
+    }, function(error) {
+      console.error('Error escuchando el chat:', error);
+    });
+  };
+
+  // Guarda un mensaje nuevo en Firestore. No hace falta "pintarlo" a mano:
+  // en cuanto se guarda, escucharChat() se entera solo (por el onSnapshot de arriba).
+  window.enviarMensajeFirestore = async function(maestroId, texto) {
+    const chatId = idDeChat(maestroId);
+    const m = maestros.find(function(x) { return x.id === maestroId; });
+    const nombreAlumno = localStorage.getItem('nombreUsuario') || 'Invitado';
+
+    // Guarda/actualiza un "resumen" del chat (quién es el alumno, quién el maestro,
+    // último mensaje) para que el maestro pueda encontrar esta conversación en SU
+    // propia bandeja de entrada (panel-maestro.html) más adelante.
+    await setDoc(doc(db, 'chats', chatId), {
+      alumnoUid: window.uidActual,
+      alumnoNombre: nombreAlumno,
+      maestroId: maestroId,
+      maestroNombre: m ? m.nombre : '',
+      maestroCorreo: m ? m.correo : '',
+      ultimoMensaje: texto,
+      actualizado: serverTimestamp(),
+      noLeidoPorMaestro: true
+    }, { merge: true });
+
+    return addDoc(collection(db, 'chats', chatId, 'mensajes'), {
+      de: 'alumno',
+      texto: texto,
+      creada: serverTimestamp()
+    });
+  };
+
+  // Borra todos los mensajes de una conversación (para "Vaciar chat").
+  window.vaciarChatFirestore = async function(maestroId) {
+    const chatId = idDeChat(maestroId);
+    const snap = await getDocs(collection(db, 'chats', chatId, 'mensajes'));
+    const borrados = [];
+    snap.forEach(function(docSnap) {
+      borrados.push(deleteDoc(doc(db, 'chats', chatId, 'mensajes', docSnap.id)));
+    });
+    await Promise.all(borrados);
+  };
+  window.eliminarChatFirestore = async function(maestroId) {
+    const chatId = idDeChat(maestroId);
+    const snap = await getDocs(collection(db, 'chats', chatId, 'mensajes'));
+    const borrados = [];
+    snap.forEach(function(docSnap) {
+      borrados.push(deleteDoc(doc(db, 'chats', chatId, 'mensajes', docSnap.id)));
+    });
+    await Promise.all(borrados);
+    await deleteDoc(doc(db, 'chats', chatId));
+  };
+  window.cerrarSesion = function() {
+    signOut(auth).then(() => {
+      localStorage.removeItem('nombreUsuario');
+      window.location.href = "index.html";
+    });
+  };
+
+  // Trae todos los maestros de la colección "maestros" en Firestore y llena
+  // el arreglo global `maestros` (declarado en el otro <script>, arriba).
+  // Ahora usa onSnapshot (en lugar de getDocs) para escuchar en tiempo real:
+  // si un maestro cambia su estado (activo/ausente/ocupado/no-disponible) desde
+  // su propio panel, aquí se refleja al instante, sin recargar la página.
+  window.unsubscribeMaestros = null;
+
+window.cargarMaestros = function() {
+  if (window.unsubscribeMaestros) window.unsubscribeMaestros();
+
+  window.unsubscribeMaestros = onSnapshot(collection(db, "maestros"), function(snap) {
+    const porCorreo = {};
+
+    snap.forEach(docSnap => {
+      const d = docSnap.data();
+      const esValido = !!d.authUid && d.authUid === docSnap.id;
+      const entrada = {
+        id: docSnap.id,
+        nombre: d.nombre || '',
+        correo: d.correo || '',
+        celular: d.celular || '',
+        estado: d.estado || 'activo',
+        mensajes: [],
+        _valido: esValido
+      };
+
+      const clave = d.correo || docSnap.id;
+      // Solo reemplaza lo que ya había si el nuevo es válido y lo anterior no lo era.
+      if (!porCorreo[clave] || (entrada._valido && !porCorreo[clave]._valido)) {
+        porCorreo[clave] = entrada;
+      }
+    });
+
+    maestros.length = 0;
+    Object.values(porCorreo).forEach(m => maestros.push(m));
+
+    renderListaMaestros(document.getElementById('buscarMaestro') ? document.getElementById('buscarMaestro').value : '');
+    actualizarEstadoEnHeaderChat();
+  }, function(error) {
+    console.error('Error cargando maestros:', error);
+    mostrarToast('No se pudo cargar la lista de maestros.', 'error');
+  });
+};
+
+  // Guarda una sugerencia en la colección "sugerencias" de Firestore.
+  // Cada documento queda como: { usuario, mensaje, fecha, leida }
+  window.guardarSugerencia = function(usuario, mensaje) {
+    return addDoc(collection(db, "sugerencias"), {
+      usuario: usuario,
+      mensaje: mensaje,
+      fecha: serverTimestamp(),
+      leida: false
+    });
+  };
+
+  // Guarda una solicitud de cita en la colección "citas" de Firestore.
+  // Cada documento queda como:
+  // { usuario, maestro, maestroCorreo, fecha, hora, motivo, estado, creada }
+  // El maestro (cuando exista su app) podría leer sus citas pendientes y confirmarlas.
+  window.guardarCita = function(usuario, maestro, maestroCorreo, fecha, hora, motivo) {
+    return addDoc(collection(db, "citas"), {
+      usuario: usuario,
+      maestro: maestro,
+      maestroCorreo: maestroCorreo,
+      fecha: fecha,
+      hora: hora,
+      motivo: motivo,
+      estado: "pendiente",
+      creada: serverTimestamp()
+    });
+  };
+</script>
+
+<script>
+  const nombre = localStorage.getItem('nombreUsuario') || 'Invitado';
+
+  window.addEventListener('load', function() {
+    document.getElementById('userNameDisplay').textContent = nombre;
+    document.getElementById('miPerfilNombre').textContent = nombre;
+    document.getElementById('miPerfilAvatar').textContent = iniciales(nombre) || 'T';
+
+    const estadoGuardado = localStorage.getItem('miEstado') || 'activo';
+    pintarEstadoActual(estadoGuardado);
+
+    cargarMaestros();
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('bienvenida') === 'true') {
+      mostrarToast("¡Bienvenido, " + nombre + "!", "exito");
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  });
+</script>
 </body>
 
 </html>

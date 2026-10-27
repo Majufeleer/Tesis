@@ -1,3 +1,4 @@
+
 /* 
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/ClientSide/javascript.js to edit this template
@@ -75,7 +76,10 @@ document.write(`
       );">
       <div style="margin-bottom: 18px;">
         <label style="display: block; color: #9CA3AF; font-size: 13px; margin-bottom: 6px;">Correo</label>
-        <input type="email" id="loginEmail" required class="login-input" style="
+        <input type="email" id="loginEmail" required class="login-input"
+onfocus="this.style.borderColor='#1861D9'; this.style.boxShadow='0 0 0 2px rgba(24,97,217,0.15)';"
+onblur="this.style.borderColor='rgba(24,97,217,0.3)'; this.style.boxShadow='none';"
+style="
           width: 100%;
           padding: 10px 14px;
           border-radius: 8px;

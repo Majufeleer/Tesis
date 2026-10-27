@@ -2265,3 +2265,154 @@ section,
 .starter-section {
   /* Add your styles here */
 }
+/*--------------------------------------------------------------
+# Ajustes personalizados AsesoriaSoft
+--------------------------------------------------------------*/
+
+/* Animación del ícono de carga (spinner) en los botones de login/registro */
+@keyframes girar {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Estilo oscuro para las opciones del dropdown de Semestre */
+#semestreSelect option {
+  background: #1e1e2f;
+  color: #fff;
+}
+
+/* Responsive: ocultar botones de login/registro en móvil y dejar visible el ícono de menú hamburguesa */
+@media (max-width: 1199px) {
+  .header .container-fluid {
+    flex-wrap: nowrap;
+  }
+  .header a[onclick*="loginModal"],
+  .header a[onclick*="registerModal"] {
+    display: none !important;
+  }
+  .mobile-nav-toggle {
+    order: 99;
+    margin-left: auto;
+    font-size: 28px;
+  }
+}
+.login-input:focus {
+  border-color: #1861D9 !important;
+  box-shadow: 0 0 0 3px rgba(24, 97, 217, 0.25);
+}
+.citas-titulo {
+  font-family: "Poppins", sans-serif;
+  color: #fff; font-size: 30px; font-weight: 700;
+  letter-spacing: .3px; text-transform: uppercase; text-align: center;
+  margin: 0 0 20px auto; display: table; padding: 8px 26px;
+  border: 2px solid #1861D9; border-radius: 30px; background: #0B1F3A;
+}
+
+.citas-resumen { color: #9CA3AF; font-size: 13.5px; margin: 4px 0 0; }
+.citas-card-botones { display: flex; gap: 10px; flex-wrap: wrap; }
+.semana-modal { max-width: 980px; width: 94%; max-height: 92vh; overflow-y: auto; padding: 26px 28px; }
+.semana-head { display: flex; align-items: flex-start; gap: 14px; position: relative; }
+.semana-head .buzon-icono { margin-bottom: 0; flex-shrink: 0; }
+.semana-head h3 { margin: 0 0 4px; }
+.semana-head p.subtitulo { margin: 0; }
+.semana-cerrar {
+  margin-left: auto; background: none; border: none; color: #9CA3AF;
+  font-size: 20px; cursor: pointer; line-height: 1;
+}
+.semana-cerrar:hover { color: #fff; }
+
+.semana-leyenda { display: flex; justify-content: center; gap: 22px; margin: 16px 0 10px; flex-wrap: wrap; }
+.semana-leyenda span { display: inline-flex; align-items: center; gap: 8px; color: #cfd4e0; font-size: 13.5px; }
+.semana-leyenda i { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+.semana-leyenda .l-libre { background: #33334a; border: 1px solid rgba(255,255,255,.2); }
+.semana-leyenda .l-cita { background: #1861D9; }
+.semana-leyenda .l-pend { background: #F59E0B; }
+
+.semana-nav { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 12px; }
+.semana-nav button {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff;
+  width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
+}
+.semana-nav button:disabled { opacity: .35; cursor: default; }
+.semana-nav span { color: #fff; font-size: 14px; font-weight: 600; min-width: 170px; text-align: center; }
+
+.semana-scroll { overflow-x: auto; }
+.semana-grid {
+  display: grid; grid-template-columns: 80px repeat(5, minmax(120px, 1fr));
+  gap: 8px 12px; align-items: center; min-width: 720px;
+}
+.sem-th {
+  background: rgba(255,255,255,0.04); padding: 10px 0; text-align: center;
+  color: #fff; font-size: 13px; font-weight: 700;
+}
+.sem-th small { display: block; color: #9CA3AF; font-weight: 400; font-size: 12px; }
+.sem-th.hora { text-align: left; padding-left: 4px; }
+.sem-hora { color: #cfd4e0; font-size: 12px; font-weight: 600; padding-left: 4px; }
+.sem-libre {
+  height: 24px; width: 100%; border-radius: 8px; cursor: pointer;
+  background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.22);
+  transition: background .15s ease;
+}
+.sem-libre:hover:not(:disabled) { background: rgba(59,130,246,0.3); border-color: #3B82F6; }
+.sem-libre:disabled { opacity: .35; cursor: default; }
+.sem-cita {
+  height: 24px; border-radius: 8px; padding: 0 8px;
+  display: flex; align-items: center; justify-content: space-between; gap: 6px;
+  background: linear-gradient(135deg, #3B82F6, #1861D9); color: #fff;
+  font-size: 12px; font-weight: 600;
+}
+.sem-cita.pendiente { background: linear-gradient(135deg, #F59E0B, #B45309); }
+.sem-cita span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sem-cita i { cursor: pointer; font-size: 12px; opacity: .85; }
+.sem-cita i:hover { opacity: 1; }
+.citas-card {
+  background: linear-gradient(145deg, #1e1e2f, #2a2a40);
+  border: 1px solid rgba(24, 97, 217, 0.25);
+  border-radius: 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  padding: 16px 24px; margin-bottom: 40px;
+  display: flex; justify-content: flex-end;
+}
+.btn-semana {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #1D4ED8; color: #fff; border: none;
+  padding: 10px 24px; border-radius: 30px; font-size: 14px; font-weight: 600; cursor: pointer;
+  box-shadow: 0 3px 10px rgba(29, 78, 216, 0.4);
+  transition: background .2s ease, transform .15s ease;
+}
+.btn-semana:hover { background: #1E40AF; color: #fff; transform: translateY(-1px); }
+
+/* Horarios libres: ya no se pueden pulsar */
+.sem-libre { cursor: default; }
+.sem-libre:hover:not(:disabled) {
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(255,255,255,0.22);
+}
+citas-acciones {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+/* Modal igual de ancho que el del maestro */
+.buzon-modal.semana-modal {
+  max-width: 980px;
+  width: 94%;
+}
+/* Sin scroll */
+.buzon-modal.semana-modal {
+  max-height: none;
+  overflow: visible;
+}
+.semana-scroll { overflow: visible; }
+.semana-grid { min-width: 0; }
+
+/* Todas las citas en azul, como las del maestro */
+.sem-cita.pendiente {
+  background: linear-gradient(135deg, #3B82F6, #1861D9);
+}
+.citas-acciones {
+  display: flex !important;
+  justify-content: flex-end !important;
+  padding: 0 40px;
+  margin-bottom: 20px;
+}

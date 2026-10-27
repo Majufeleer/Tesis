@@ -856,9 +856,12 @@
 </div><!-- End Page Title -->
 
 <section id="bandeja" class="section">
-
   <div style="padding: 0 40px;" data-aos="fade-up">
-
+<div class="citas-acciones">
+  <button type="button" class="btn-semana" onclick="abrirSemana()">
+    <i class="bi bi-calendar-week"></i> Ver mis asesorías
+  </button>
+</div>
     <h2 class="bandeja-titulo">Bandeja de Entrada</h2>
 
     <div class="inbox-card">
@@ -1057,7 +1060,30 @@
     </div>
   </div>
 </div>
+<!-- Modal próximas asesorías (vista semanal) -->
+<div class="buzon-overlay" id="semanaOverlay">
+  <div class="buzon-modal semana-modal">
+    <div class="semana-head">
+      <div class="buzon-icono"><i class="bi bi-calendar-check"></i></div>
+      <div>
+        <h3>Próximas Asesorías</h3>
+        <p class="subtitulo">Da clic en un horario disponible para agendar una cita.</p>
+      </div>
+      <button type="button" class="semana-cerrar" onclick="cerrarSemana()"><i class="bi bi-x-lg"></i></button>
+    </div>
 
+    <div class="semana-leyenda">
+      <span><i class="l-libre"></i> Disponible</span>
+      <span><i class="l-cita"></i> Cita confirmada</span>
+    </div>
+
+   
+
+    <div class="semana-scroll">
+      <div class="semana-grid" id="semanaGrid"></div>
+    </div>
+  </div>
+</div>
 <!-- Modal de confirmación genérico (reemplaza al confirm() del navegador) -->
 <div class="buzon-overlay" id="confirmOverlay">
   <div class="buzon-modal" style="max-width:400px;">
@@ -1173,12 +1199,103 @@
     document.getElementById('estadoMenu').classList.remove('abierto');
     if (window.guardarMiEstado) window.guardarMiEstado(estado);
   }
-
-  function pintarEstadoActual(estado) {
+  
+    function pintarEstadoActual(estado) {
     var info = estadosInfo[estado] || estadosInfo['activo'];
     document.getElementById('estadoTextoActual').textContent = info.texto;
     document.getElementById('estadoPuntoActual').className = 'estado-punto ' + info.clase;
   }
+// ===== Asesorías pendientes del alumno =====
+window.unsubscribeCitas = null;
+
+  window.escucharCitas = function() {
+    if (window.unsubscribeCitas) window.unsubscribeCitas();
+    if (!window.uidActual) return;
+
+    const usuario = auth.currentUser;
+    const misDatos = [
+      window.uidActual,
+      (usuario && usuario.email ? usuario.email : ''),
+      (localStorage.getItem('nombreUsuario') || '')
+    ].map(function(x) { return String(x).trim().toLowerCase(); })
+     .filter(function(x) { return x; });
+
+    // Convierte "15:00" o "3:00 PM" a "15:00"
+    function hora24(h) {
+      h = String(h || '').trim().toUpperCase();
+      const m = h.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/);
+      if (!m) return '00:00';
+      let hh = parseInt(m[1], 10);
+      if (m[3] === 'PM' && hh < 12) hh += 12;
+      if (m[3] === 'AM' && hh === 12) hh = 0;
+      return (hh < 10 ? '0' : '') + hh + ':' + m[2];
+    }
+
+    window.unsubscribeCitas = onSnapshot(collection(db, 'citas'), function(snap) {
+      const citas = [];
+      snap.forEach(function(docSnap) {
+        const d = docSnap.data();
+        if (d.estado === 'cancelada' || d.estado === 'rechazada') return;
+
+        // Es mía si cualquier campo de texto coincide con mi uid, correo o nombre
+        const esMia = Object.values(d).some(function(v) {
+          return typeof v === 'string' && misDatos.indexOf(v.trim().toLowerCase()) !== -1;
+        });
+        if (!esMia) return;
+
+        const h = hora24(d.hora);
+        citas.push({
+          id: docSnap.id,
+          ...d,
+          hora: h,
+          maestro: d.maestro || d.maestroNombre || 'Asesoría',
+          inicio: new Date(d.fecha + 'T' + h + ':00')
+        });
+      });
+      window.actualizarCitas(citas);
+    }, function(error) {
+      console.error('Error escuchando citas:', error);
+    });
+  };
+
+function escaparHtml(t) {
+  const div = document.createElement('div');
+  div.textContent = t == null ? '' : String(t);
+  return div.innerHTML;
+}
+
+function pintarCitas(citas) {
+  const cont = document.getElementById('listaCitas');
+  if (!cont) return;
+
+  if (citas.length === 0) {
+    cont.innerHTML = '<p class="citas-vacio">No tienes asesorías pendientes. ¡Agenda una cuando la necesites!</p>';
+    return;
+  }
+
+  cont.innerHTML = citas.map(function(c) {
+    const dia = c.inicio.getDate();
+    const mes = c.inicio.toLocaleDateString('es-MX', { month: 'short' }).replace('.', '');
+    const hora = c.inicio.toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit', hour12: true });
+    const confirmada = c.estado === 'confirmada';
+    return `
+      <div class="cita-item">
+        <div class="cita-fecha-box">
+          <span class="dia">${dia}</span>
+          <span class="mes">${escaparHtml(mes)}</span>
+        </div>
+        <div class="cita-info">
+          <p class="cita-maestro">${escaparHtml(c.maestro)}</p>
+          <p class="cita-hora"><i class="bi bi-clock"></i> ${hora}</p>
+          ${c.motivo ? `<p class="cita-motivo">${escaparHtml(c.motivo)}</p>` : ''}
+          <span class="cita-badge ${confirmada ? 'confirmada' : 'pendiente'}">
+            ${confirmada ? 'Confirmada' : 'Pendiente de confirmar'}
+          </span>
+        </div>
+      </div>`;
+  }).join('');
+}
+ 
 
   document.addEventListener('click', function(ev) {
     var wrap = document.getElementById('estadoSelector');
@@ -1189,17 +1306,27 @@
   });
 
   // ===== Agendar cita =====
+  
+    // ===== Utilidades =====
+  function escaparHtml(t) {
+    const div = document.createElement('div');
+    div.textContent = t == null ? '' : String(t);
+    return div.innerHTML;
+  }
+  function dos(n) { return String(n).padStart(2, '0'); }
+  function claveFechaLocal(d) {
+    return d.getFullYear() + '-' + dos(d.getMonth() + 1) + '-' + dos(d.getDate());
+  }
+
+  // ===== Agendar cita =====
   function abrirCita() {
     const select = document.getElementById('citaMaestro');
-    select.innerHTML = maestros.map(m => `<option value="${m.id}">${m.nombre}</option>`).join('');
-
-    const hoy = new Date().toISOString().split('T')[0];
+    select.innerHTML = maestros.map(m => `<option value="${m.id}">${escaparHtml(m.nombre)}</option>`).join('');
     const fechaInput = document.getElementById('citaFecha');
-    fechaInput.min = hoy;
+    fechaInput.min = claveFechaLocal(new Date());
     fechaInput.value = '';
     document.getElementById('citaHora').value = '';
     document.getElementById('citaMotivo').value = '';
-
     document.getElementById('citaOverlay').style.display = 'flex';
   }
 
@@ -1208,7 +1335,7 @@
   }
 
   function enviarCita() {
-    const maestroId = parseInt(document.getElementById('citaMaestro').value, 10);
+    const maestroId = document.getElementById('citaMaestro').value;
     const fecha = document.getElementById('citaFecha').value;
     const hora = document.getElementById('citaHora').value;
     const motivo = document.getElementById('citaMotivo').value.trim();
@@ -1239,6 +1366,138 @@
         boton.textContent = textoOriginal;
       });
   }
+
+  // ===== Asesorías: vista semanal =====
+  window.citasAlumno = [];
+  let semanaOffset = 0;
+  const DIAS_SEMANA = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes'];
+  const HORAS_SEMANA = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19];
+
+  function formatoHora12(h) {
+    return (h % 12 === 0 ? 12 : h % 12) + ':00 ' + (h >= 12 ? 'PM' : 'AM');
+  }
+
+  function lunesDeSemana(offset) {
+    const h = new Date();
+    h.setHours(0, 0, 0, 0);
+    const dow = h.getDay();
+    const diff = dow === 0 ? 1 : (dow === 6 ? 2 : 1 - dow);
+    const l = new Date(h);
+    l.setDate(h.getDate() + diff + offset * 7);
+    return l;
+  }
+
+  function abrirSemana() {
+    semanaOffset = 0;
+    document.getElementById('semanaOverlay').style.display = 'flex';
+    pintarSemana();
+  }
+
+  function cerrarSemana() {
+    document.getElementById('semanaOverlay').style.display = 'none';
+  }
+
+  function cambiarSemana(delta) {
+    if (semanaOffset + delta < 0) return;
+    semanaOffset += delta;
+    pintarSemana();
+  }
+
+  function pintarSemana() {
+    const grid = document.getElementById('semanaGrid');
+    if (!grid) return;
+
+    const lunes = lunesDeSemana(semanaOffset);
+    const dias = DIAS_SEMANA.map(function(nombre, i) {
+      const f = new Date(lunes);
+      f.setDate(lunes.getDate() + i);
+      return {
+        nombre: nombre,
+        clave: claveFechaLocal(f),
+        etiqueta: f.getDate() + ' ' + f.toLocaleDateString('es-MX', { month: 'short' }).replace('.', '')
+      };
+    });
+
+    const porSlot = {};
+    window.citasAlumno.forEach(function(c) {
+      const h = parseInt((c.hora || '0').split(':')[0], 10);
+      porSlot[c.fecha + '_' + h] = c;
+    });
+
+    const ahora = new Date();
+    let html = '<div class="sem-th hora">Hora</div>';
+    dias.forEach(function(d) {
+      html += '<div class="sem-th">' + d.nombre + '<small>' + d.etiqueta + '</small></div>';
+    });
+
+    HORAS_SEMANA.forEach(function(h) {
+      html += '<div class="sem-hora">' + formatoHora12(h) + '</div>';
+      dias.forEach(function(d) {
+        const c = porSlot[d.clave + '_' + h];
+        if (c) {
+          const pend = c.estado !== 'confirmada';
+          html += '<div class="sem-cita' + (pend ? ' pendiente' : '') + '" title="' +
+            escaparHtml(c.maestro) + ' · ' + (pend ? 'Pendiente de confirmar' : 'Confirmada') +
+            (c.motivo ? ' · ' + escaparHtml(c.motivo) : '') + '">' +
+            '<span>' + escaparHtml(c.maestro) + '</span>' +
+            '<i class="bi bi-trash3" title="Cancelar cita" onclick="pedirCancelarCita(\'' + c.id + '\', event)"></i>' +
+            '</div>';
+        } else {
+    html += '<div class="sem-libre"></div>';
+        }
+      });
+    });
+
+    grid.innerHTML = html;
+  }
+
+  function agendarEnHorario(fecha, hora) {
+    cerrarSemana();
+    abrirCita();
+    document.getElementById('citaFecha').value = fecha;
+    document.getElementById('citaHora').value = dos(hora) + ':00';
+  }
+
+  function pedirCancelarCita(id, ev) {
+    if (ev) ev.stopPropagation();
+    const c = window.citasAlumno.find(function(x) { return x.id === id; });
+    if (!c) return;
+    mostrarConfirm(
+      'Cancelar asesoría',
+      '¿Cancelar tu asesoría con ' + c.maestro + '? Esta acción no se puede deshacer.',
+      function() {
+        window.cancelarCitaFirestore(id).then(function() {
+          mostrarToast('Asesoría cancelada.', 'exito');
+        }).catch(function(error) {
+          console.error('Error cancelando cita:', error);
+          mostrarToast('No se pudo cancelar la asesoría.', 'error');
+        });
+      }
+    );
+  }
+
+  window.actualizarCitas = function(citas) {
+    window.citasAlumno = citas;
+
+    const futuras = citas
+      .filter(function(c) { return c.inicio >= new Date(); })
+      .sort(function(a, b) { return a.inicio - b.inicio; });
+
+    const resumen = document.getElementById('citasResumen');
+    if (resumen) {
+      if (futuras.length === 0) {
+        resumen.textContent = 'No tienes asesorías pendientes. ¡Agenda una cuando la necesites!';
+      } else {
+        const p = futuras[0];
+        const cuando = p.inicio.toLocaleDateString('es-MX', { weekday: 'long', day: 'numeric', month: 'long' }) +
+          ', ' + p.inicio.toLocaleTimeString('es-MX', { hour: 'numeric', minute: '2-digit', hour12: true });
+        resumen.textContent = 'Tienes ' + futuras.length + (futuras.length === 1 ? ' asesoría' : ' asesorías') +
+          '. Próxima: ' + cuando + ' con ' + p.maestro + '.';
+      }
+    }
+
+    if (document.getElementById('semanaOverlay').style.display === 'flex') pintarSemana();
+  };
 
   // ===== Bandeja de entrada / mini chat =====
   const gradientes = [
@@ -1572,6 +1831,7 @@
 onAuthStateChanged(auth, function(user) {
   window.uidActual = user ? user.uid : null;
   window.escucharChatsActivos();
+   window.escucharCitas();
 });
 
   // El ID de cada conversación es siempre "<tuUid>_<idDelMaestro>", así cada par
@@ -1638,7 +1898,69 @@ window.marcarChatLeido = async function(maestroId) {
       console.error('Error guardando estado:', error);
     }
   };
+  // ===== Asesorías del alumno (tiempo real) =====
+  window.unsubscribeCitas = null;
 
+   window.escucharCitas = function() {
+    if (window.unsubscribeCitas) window.unsubscribeCitas();
+    if (!window.uidActual) return;
+
+    const usuario = auth.currentUser;
+    const misDatos = [
+      window.uidActual,
+      (usuario && usuario.email ? usuario.email : ''),
+      (localStorage.getItem('nombreUsuario') || '')
+    ].map(function(x) { return String(x).trim().toLowerCase(); })
+     .filter(function(x) { return x; });
+
+    // Acepta 9, "9", "15:00" o "3:00 PM" y devuelve "HH:MM"
+    function hora24(h) {
+      if (typeof h === 'number') return (h < 10 ? '0' : '') + h + ':00';
+      h = String(h || '').trim().toUpperCase();
+      if (/^\d{1,2}$/.test(h)) return (h.length < 2 ? '0' : '') + h + ':00';
+      const m = h.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/);
+      if (!m) return '00:00';
+      let hh = parseInt(m[1], 10);
+      if (m[3] === 'PM' && hh < 12) hh += 12;
+      if (m[3] === 'AM' && hh === 12) hh = 0;
+      return (hh < 10 ? '0' : '') + hh + ':' + m[2];
+    }
+
+    window.unsubscribeCitas = onSnapshot(collection(db, 'citas'), function(snap) {
+      const citas = [];
+      snap.forEach(function(docSnap) {
+        const d = docSnap.data();
+        if (d.estado === 'cancelada' || d.estado === 'rechazada') return;
+
+        // Es mía si cualquier campo de texto coincide con mi uid, correo o nombre
+        const esMia = Object.values(d).some(function(v) {
+          return typeof v === 'string' && misDatos.indexOf(v.trim().toLowerCase()) !== -1;
+        });
+        if (!esMia) return;
+
+        // Nombre del maestro: del campo de la cita o buscándolo por su id
+        const mae = (typeof maestros !== 'undefined')
+          ? maestros.find(function(x) { return x.id === d.maestroId; }) : null;
+        const nombreMaestro = d.maestro || d.maestroNombre || (mae ? mae.nombre : '') || 'Asesoría';
+
+        const h = hora24(d.hora);
+        citas.push({
+          id: docSnap.id,
+          ...d,
+          hora: h,
+          maestro: nombreMaestro,
+          inicio: new Date(d.fecha + 'T' + h + ':00')
+        });
+      });
+      window.actualizarCitas(citas);
+    }, function(error) {
+      console.error('Error escuchando citas:', error);
+    });
+  };
+
+  window.cancelarCitaFirestore = function(citaId) {
+    return deleteDoc(doc(db, 'citas', citaId));
+  };
   function formatearHora(fecha) {
     return fecha.toLocaleTimeString('es-MX', {
       hour: 'numeric',
@@ -1835,6 +2157,7 @@ window.cargarMaestros = function() {
   window.guardarCita = function(usuario, maestro, maestroCorreo, fecha, hora, motivo) {
     return addDoc(collection(db, "citas"), {
       usuario: usuario,
+      alumnoUid: window.uidActual,
       maestro: maestro,
       maestroCorreo: maestroCorreo,
       fecha: fecha,
